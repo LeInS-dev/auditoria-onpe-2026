@@ -914,147 +914,9 @@
     </div>
   </div>
 
-  <!-- ====================== SECCIÓN 7: colegios desplazados ====================== -->
+  <!-- ====================== SECCIÓN 7: ganadores y perdedores ====================== -->
   <div class="seccion">
     <div class="seccion-num">Pregunta 07</div>
-    <h2 class="pregunta">¿Están los colegios <em>geolocalizados</em> correctamente?</h2>
-
-    <p class="explicacion">
-      Al cruzar los nombres de los colegios asignados a mesas atípicas con el padrón oficial
-      del MINEDU (Ministerio de Educación) para Loreto, aparece una inconsistencia: colegios
-      de la selva peruana figuran asignados al departamento de <strong>Lima</strong>.
-    </p>
-
-    <!-- Flujo visual Loreto -> Lima -->
-    <div style="display:flex; align-items:center; justify-content:center; gap:24px; margin: 40px 0; flex-wrap: wrap;">
-      <div style="background: var(--bg-card); border: 2px solid var(--accent); border-radius: 12px; padding: 20px 28px; text-align:center; min-width: 220px;">
-        <div style="font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--txt-muted); text-transform: uppercase; margin-bottom: 6px;">Ubicación real (MINEDU)</div>
-        <div style="font-size: 24px; font-weight: 800; color: var(--accent);">LORETO</div>
-        <div style="font-size: 12px; color: var(--txt-muted); margin-top: 4px;">Datem del Marañón, Alto Amazonas, Nauta, Maynas</div>
-      </div>
-      <div style="font-size: 40px; color: var(--accent); font-weight: 300;">→</div>
-      <div style="background: var(--bg-card); border: 2px solid var(--borde); border-radius: 12px; padding: 20px 28px; text-align:center; min-width: 220px;">
-        <div style="font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--txt-muted); text-transform: uppercase; margin-bottom: 6px;">Ubicación asignada (ONPE)</div>
-        <div style="font-size: 24px; font-weight: 800;">LIMA</div>
-        <div style="font-size: 12px; color: var(--txt-muted); margin-top: 4px;">con ubigeos de distritos limeños</div>
-      </div>
-    </div>
-
-    <!-- Tarjetas de magnitud -->
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin: 32px 0;">
-      <div style="background: var(--bg-card); border: 1px solid var(--borde); border-radius: 12px; padding: 20px; text-align:center;">
-        <div style="font-size: 30px; font-weight: 800; color: var(--accent);">78</div>
-        <div style="font-size: 12px; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px;">Colegios de Loreto<br>figurando en Lima</div>
-      </div>
-      <div style="background: var(--bg-card); border: 1px solid var(--borde); border-radius: 12px; padding: 20px; text-align:center;">
-        <div style="font-size: 30px; font-weight: 800; color: var(--accent);">196</div>
-        <div style="font-size: 12px; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px;">Mesas atípicas<br>involucradas</div>
-      </div>
-      <div style="background: var(--bg-card); border: 1px solid var(--borde); border-radius: 12px; padding: 20px; text-align:center;">
-        <div style="font-size: 30px; font-weight: 800; color: var(--accent);">46,528</div>
-        <div style="font-size: 12px; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px;">Electores hábiles<br>afectados</div>
-      </div>
-      <div style="background: var(--bg-card); border: 1px solid var(--borde); border-radius: 12px; padding: 20px; text-align:center;">
-        <div style="font-size: 30px; font-weight: 800; color: var(--accent);">15,338</div>
-        <div style="font-size: 12px; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px;">Votos válidos<br>emitidos</div>
-      </div>
-    </div>
-
-    <!-- Ejemplos concretos -->
-    <h3 style="font-family: var(--serif); font-size: 22px; margin-top: 40px; margin-bottom: 16px;">Ejemplos verificables contra el padrón MINEDU</h3>
-    <p class="explicacion" style="font-size: 14px;">
-      Estos colegios están registrados oficialmente en Loreto por el MINEDU (fuente: <em>Relación de Plazas CPM 2019, RVM 033-2019-MINEDU</em>)
-      pero la ONPE los reporta como locales de votación en Lima.
-    </p>
-
-    <div style="overflow-x:auto; margin: 20px 0;">
-      <table style="width:100%; border-collapse: collapse; font-size: 13px;">
-        <thead>
-          <tr style="background: var(--bg-card); border-bottom: 2px solid var(--borde);">
-            <th style="text-align:left; padding: 10px; font-weight: 700;">Colegio</th>
-            <th style="text-align:left; padding: 10px; font-weight: 700;">Ubicación real (MINEDU)</th>
-            <th style="text-align:left; padding: 10px; font-weight: 700;">ONPE dice</th>
-            <th style="text-align:right; padding: 10px; font-weight: 700;">Mesas</th>
-            <th style="text-align:right; padding: 10px; font-weight: 700;">Votos</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="border-bottom: 1px solid var(--borde);">
-            <td style="padding: 10px;"><strong>IE 62013</strong> VICTOR M. SIFUENTES MESIA</td>
-            <td style="padding: 10px;">Yurimaguas, Alto Amazonas</td>
-            <td style="padding: 10px;">Lima</td>
-            <td style="padding: 10px; text-align:right;">12</td>
-            <td style="padding: 10px; text-align:right;">1,309</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--borde);">
-            <td style="padding: 10px;"><strong>IE 62011</strong></td>
-            <td style="padding: 10px;">Yurimaguas, Alto Amazonas</td>
-            <td style="padding: 10px;">Lima</td>
-            <td style="padding: 10px; text-align:right;">9</td>
-            <td style="padding: 10px; text-align:right;">893</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--borde);">
-            <td style="padding: 10px;"><strong>IE 60540</strong> WALSTER SALINAS SAAVEDRA</td>
-            <td style="padding: 10px;">Nauta, Loreto</td>
-            <td style="padding: 10px;">Lima</td>
-            <td style="padding: 10px; text-align:right;">8</td>
-            <td style="padding: 10px; text-align:right;">641</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--borde);">
-            <td style="padding: 10px;"><strong>IE 60329</strong> MONTERRICO <em style="color: var(--txt-muted);">(lengua kichwa)</em></td>
-            <td style="padding: 10px;">Torres Causana, Maynas</td>
-            <td style="padding: 10px;">Lima</td>
-            <td style="padding: 10px; text-align:right;">5</td>
-            <td style="padding: 10px; text-align:right;">534</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--borde);">
-            <td style="padding: 10px;"><strong>IE 62316</strong> KAUPAN <em style="color: var(--txt-muted);">(lengua awajún)</em></td>
-            <td style="padding: 10px;">Cahuapanas, Datem del Marañón</td>
-            <td style="padding: 10px;">Lima</td>
-            <td style="padding: 10px; text-align:right;">3</td>
-            <td style="padding: 10px; text-align:right;">362</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--borde);">
-            <td style="padding: 10px;"><strong>IE 62292</strong> SAN JUAN DEL MANCHARI <em style="color: var(--txt-muted);">(lengua achuar)</em></td>
-            <td style="padding: 10px;">Andoas, Datem del Marañón</td>
-            <td style="padding: 10px;">Lima</td>
-            <td style="padding: 10px; text-align:right;">2</td>
-            <td style="padding: 10px; text-align:right;">~200</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--borde);">
-            <td style="padding: 10px;"><strong>IE 62315</strong> SACHAPAPA <em style="color: var(--txt-muted);">(lengua awajún)</em></td>
-            <td style="padding: 10px;">Manseriche, Datem del Marañón</td>
-            <td style="padding: 10px;">Lima</td>
-            <td style="padding: 10px; text-align:right;">3</td>
-            <td style="padding: 10px; text-align:right;">405</td>
-          </tr>
-          <tr>
-            <td colspan="5" style="padding: 14px; text-align:center; font-style:italic; color: var(--txt-muted);">… y 71 colegios más en la misma situación.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="tip">
-      <div class="tip-titulo"><strong>Importante: no hay doble conteo de votos ✓ verificado</strong></div>
-      Estos 15,338 votos <strong>no están duplicados</strong>. Se verificó uno a uno: ninguno de
-      los 78 colegios aparece también en mesas regulares de Loreto ni de otra región —
-      son <strong>exclusivos del rango 900K</strong>. El problema no es conteo inflado,
-      sino <strong>geolocalización incorrecta</strong>: votos de la Amazonía peruana registrados
-      como votos limeños.
-    </div>
-
-    <div class="tip" style="margin-top: 16px;">
-      <div class="tip-titulo"><strong>Alcance del análisis</strong></div>
-      Este cruce usa solo el padrón MINEDU de <strong>Loreto</strong> (1,099 colegios comparados).
-      Replicar este análisis con padrones de Amazonas, Ucayali, Madre de Dios y otras regiones
-      amazónicas podría revelar un patrón más amplio.
-    </div>
-  </div>
-
-  <!-- ====================== SECCIÓN 8: ganadores y perdedores ====================== -->
-  <div class="seccion">
-    <div class="seccion-num">Pregunta 08</div>
     <h2 class="pregunta">¿Qué <em>partidos</em> ganan y cuáles pierden en estas mesas?</h2>
 
     <p class="explicacion">
@@ -1144,14 +1006,6 @@
       estadísticamente inusual.
     </div>
 
-    <div class="tip" style="margin-top: 16px;">
-      <div class="tip-titulo"><strong>Verificación: no depende de los colegios de Loreto</strong></div>
-      Al recalcular el sesgo <em>excluyendo</em> las 196 mesas de los 78 colegios de Loreto
-      (Sección 07), los números prácticamente no cambian: JP mantiene <strong>+26.20 pts</strong>
-      (vs +26.03 original) y Perú Libre <strong>+7.68 pts</strong> (vs +7.47). El sesgo es un
-      fenómeno sistemático en las 4,508 mesas atípicas restantes, no un efecto de los
-      colegios desplazados.
-    </div>
   </div>
 
   <!-- ====================== CIERRE ====================== -->
@@ -1173,10 +1027,6 @@
     <p style="color: #d8d2c4; font-size: 16px;">
       <strong style="color: #fff;">4.</strong> ¿Por qué las 4,704 mesas se dividen en dos tandas
       con formatos de local distintos, en lugar de constituir un bloque homogéneo?
-    </p>
-    <p style="color: #d8d2c4; font-size: 16px;">
-      <strong style="color: #fff;">5.</strong> ¿Por qué al menos 78 colegios de Loreto
-      (confirmados contra padrón MINEDU) figuran como locales de votación en Lima?
     </p>
     <p style="color: #d8d2c4; font-size: 16px; margin-top: 24px;">
       Las preguntas no afirman fraude. Pero requieren respuesta institucional clara.
