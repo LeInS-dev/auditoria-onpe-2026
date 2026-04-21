@@ -1036,11 +1036,12 @@
     </div>
 
     <div class="tip">
-      <div class="tip-titulo"><strong>Importante: no hay doble conteo de votos</strong></div>
-      Estos 15,338 votos <strong>no están duplicados</strong>. Los 78 colegios no aparecen en
-      mesas regulares de Loreto — son <em>exclusivos</em> del rango 900K. El problema no es de
-      conteo inflado, sino de <strong>geolocalización incorrecta</strong>: votos de la Amazonía
-      peruana que figuran como votos limeños.
+      <div class="tip-titulo"><strong>Importante: no hay doble conteo de votos ✓ verificado</strong></div>
+      Estos 15,338 votos <strong>no están duplicados</strong>. Se verificó uno a uno: ninguno de
+      los 78 colegios aparece también en mesas regulares de Loreto ni de otra región —
+      son <strong>exclusivos del rango 900K</strong>. El problema no es conteo inflado,
+      sino <strong>geolocalización incorrecta</strong>: votos de la Amazonía peruana registrados
+      como votos limeños.
     </div>
 
     <div class="tip" style="margin-top: 16px;">
@@ -1048,6 +1049,108 @@
       Este cruce usa solo el padrón MINEDU de <strong>Loreto</strong> (1,099 colegios comparados).
       Replicar este análisis con padrones de Amazonas, Ucayali, Madre de Dios y otras regiones
       amazónicas podría revelar un patrón más amplio.
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 8: ganadores y perdedores ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 08</div>
+    <h2 class="pregunta">¿Qué <em>partidos</em> ganan y cuáles pierden en estas mesas?</h2>
+
+    <p class="explicacion">
+      El sesgo de +26 puntos a Sánchez Palomino no es un hecho aislado: al desglosar los votos
+      por partido político, aparece un <strong>patrón ideológico claro</strong>. Los partidos
+      que ganan en las mesas atípicas y los que pierden forman dos bloques opuestos.
+    </p>
+
+    <!-- Dos columnas: ganadores vs perdedores -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0;" id="bloques-partidos">
+
+      <!-- Ganadores -->
+      <div style="background: var(--bg-card); border: 1px solid var(--borde); border-radius: 12px; padding: 24px;">
+        <div style="font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px;">↑ Ganan en mesas atípicas</div>
+        <div style="font-size: 12px; color: var(--txt-muted); margin-bottom: 20px;">Sacan más votos de los que tendrían en una distribución normal</div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>JUNTOS POR EL PERÚ</strong><span style="color:var(--accent); font-weight:700;">+26.03 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 10.5% → 36.5% | 217,898 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:var(--accent); height:6px; border-radius:3px; width:100%;"></div></div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>PERÚ LIBRE</strong><span style="color:var(--accent); font-weight:700;">+7.47 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 0.4% → 7.9% | 46,825 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:var(--accent); height:6px; border-radius:3px; width:29%;"></div></div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>PODEMOS PERÚ</strong><span style="color:var(--accent); font-weight:700;">+1.63 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 1.5% → 3.1% | 18,440 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:var(--accent); height:6px; border-radius:3px; width:6%;"></div></div>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>VENCEREMOS</strong><span style="color:var(--accent); font-weight:700;">+0.91 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 0.8% → 1.7% | 10,106 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:var(--accent); height:6px; border-radius:3px; width:3%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Perdedores -->
+      <div style="background: var(--bg-card); border: 1px solid var(--borde); border-radius: 12px; padding: 24px;">
+        <div style="font-size: 14px; font-weight: 700; color: #1a2438; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px;">↓ Pierden en mesas atípicas</div>
+        <div style="font-size: 12px; color: var(--txt-muted); margin-bottom: 20px;">Sacan menos votos de los que tendrían en una distribución normal</div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>RENOVACIÓN POPULAR</strong><span style="color:#1a2438; font-weight:700;">−9.78 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 12.1% → 2.3% | 13,987 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:#1a2438; height:6px; border-radius:3px; width:37%;"></div></div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>PARTIDO DEL BUEN GOBIERNO</strong><span style="color:#1a2438; font-weight:700;">−9.41 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 11.3% → 1.8% | 10,946 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:#1a2438; height:6px; border-radius:3px; width:36%;"></div></div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>PAÍS PARA TODOS</strong><span style="color:#1a2438; font-weight:700;">−5.46 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 7.9% → 2.5% | 14,876 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:#1a2438; height:6px; border-radius:3px; width:21%;"></div></div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>AHORA NACIÓN</strong><span style="color:#1a2438; font-weight:700;">−3.41 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 7.3% → 3.9% | 23,066 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:#1a2438; height:6px; border-radius:3px; width:13%;"></div></div>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><strong>FUERZA POPULAR</strong><span style="color:#1a2438; font-weight:700;">−2.15 pts</span></div>
+          <div style="font-size:11px; color: var(--txt-muted);">de 17.1% → 15.0% | 89,404 votos</div>
+          <div style="background:#eee; height:6px; border-radius:3px; margin-top:4px;"><div style="background:#1a2438; height:6px; border-radius:3px; width:8%;"></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>Lectura del patrón ideológico</strong></div>
+      Los cuatro partidos que ganan en mesas atípicas (JP, Perú Libre, Podemos, Venceremos)
+      comparten un posicionamiento de <strong>izquierda</strong>. Los cinco partidos que más
+      pierden (Renovación Popular, Buen Gobierno, País Para Todos, Ahora Nación, Fuerza Popular)
+      son de <strong>centro y derecha</strong>. Que la asimetría caiga en un solo eje ideológico
+      —y no se distribuya aleatoriamente entre los 36 partidos— es lo que hace el hallazgo
+      estadísticamente inusual.
+    </div>
+
+    <div class="tip" style="margin-top: 16px;">
+      <div class="tip-titulo"><strong>Verificación: no depende de los colegios de Loreto</strong></div>
+      Al recalcular el sesgo <em>excluyendo</em> las 196 mesas de los 78 colegios de Loreto
+      (Sección 07), los números prácticamente no cambian: JP mantiene <strong>+26.20 pts</strong>
+      (vs +26.03 original) y Perú Libre <strong>+7.68 pts</strong> (vs +7.47). El sesgo es un
+      fenómeno sistemático en las 4,508 mesas atípicas restantes, no un efecto de los
+      colegios desplazados.
     </div>
   </div>
 
