@@ -6,5 +6,6 @@
 
 # Whitelist explícita
 !.gitignore
+!.nojekyll
 !index.html
 !README.md
