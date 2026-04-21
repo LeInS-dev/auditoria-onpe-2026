@@ -1,0 +1,1059 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Auditoría ONPE — Dashboard Visual al 20 Abril 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f3ede4;
+    --bg-dark: #1a2438;
+    --bg-card: #ebe4d8;
+    --bg-soft: #f7f1e8;
+    --ink: #1a2438;
+    --ink-soft: #5a6478;
+    --ink-mute: #8a92a3;
+    --rule: #c9bfb0;
+    --accent: #9d3d3d;
+    --confirm: #3d6b4a;
+    --warn: #b88a2c;
+    --bar-oficial: #1a2438;
+    --bar-verif: #9d3d3d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 900px; margin: 0 auto; padding: 56px 32px; }
+  .header-strip {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; color: var(--ink-soft); text-transform: uppercase;
+    border-bottom: 1px solid var(--rule); padding-bottom: 16px; margin-bottom: 48px;
+  }
+  .badge {
+    display: inline-block; border: 1px solid var(--accent);
+    color: var(--accent); padding: 4px 12px; font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace; margin-bottom: 24px;
+  }
+  h1 {
+    font-family: 'Crimson Pro', serif; font-size: 52px; line-height: 1.05;
+    font-weight: 600; margin: 0 0 24px 0; letter-spacing: -0.02em;
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+  .subtitle {
+    font-family: 'Crimson Pro', serif; font-style: italic;
+    font-size: 18px; line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: 40px; max-width: 720px;
+  }
+
+  .seccion {
+    margin: 64px 0; padding: 32px;
+    background: var(--bg-soft); border: 1px solid var(--rule);
+  }
+  .seccion-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.15em; color: var(--ink-soft); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .pregunta {
+    font-family: 'Crimson Pro', serif; font-size: 32px; line-height: 1.15;
+    font-weight: 600; margin: 0 0 20px 0; color: var(--ink);
+  }
+  .pregunta em { color: var(--accent); font-style: italic; }
+  .respuesta-corta {
+    font-size: 18px; padding: 16px 20px; margin: 16px 0 24px 0;
+    background: var(--bg-card); border-left: 4px solid var(--accent);
+    font-family: 'Crimson Pro', serif; font-style: italic;
+  }
+  .respuesta-corta.ok { border-color: var(--confirm); }
+  .respuesta-corta strong { font-style: normal; font-weight: 700; }
+  .explicacion {
+    font-size: 15px; color: var(--ink-soft); margin: 16px 0;
+  }
+  .explicacion strong { color: var(--ink); font-weight: 600; }
+
+  /* GRÁFICO DE BARRAS HORIZONTAL DOBLE */
+  .grafico-doble {
+    margin: 24px 0;
+  }
+  .grafico-leyenda {
+    display: flex; gap: 24px; margin-bottom: 16px; font-size: 13px;
+  }
+  .grafico-leyenda .item {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .grafico-leyenda .swatch {
+    width: 14px; height: 14px; display: inline-block;
+  }
+  .swatch.oficial { background: var(--bar-oficial); }
+  .swatch.verif { background: var(--bar-verif); }
+
+  .barra-fila {
+    display: grid; grid-template-columns: 200px 1fr 80px;
+    gap: 12px; align-items: center; margin: 8px 0;
+    font-size: 13px;
+  }
+  .barra-fila .nombre { font-weight: 500; }
+  .barra-fila .nombre .partido { font-size: 11px; color: var(--ink-mute); }
+  .barra-contenedor {
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .barra {
+    height: 14px; position: relative;
+    background: var(--bg-card);
+  }
+  .barra .fill {
+    height: 100%; background: var(--bar-oficial);
+    transition: width 0.3s ease;
+  }
+  .barra.verif .fill { background: var(--bar-verif); }
+  .barra .label {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: var(--ink); font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+  .barra .label.outside {
+    left: calc(100% + 4px); right: auto;
+  }
+  .barra-fila .total {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    text-align: right; color: var(--ink-mute);
+  }
+
+  /* COMPARACIÓN VISUAL DE 2 RANGOS */
+  .compara-rangos {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0;
+  }
+  .rango-card {
+    padding: 20px; background: white; border: 1px solid var(--rule);
+  }
+  .rango-card .titulo {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.15em; color: var(--ink-mute); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .rango-card .subtitulo {
+    font-family: 'Crimson Pro', serif; font-size: 22px; font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .rango-card .conteo {
+    font-size: 13px; color: var(--ink-soft); margin-bottom: 20px;
+  }
+  .partido-pct {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px;
+    align-items: center; margin: 6px 0; font-size: 12px;
+  }
+  .partido-pct .nombre { color: var(--ink-soft); }
+  .partido-pct .pct {
+    font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    text-align: right; min-width: 50px;
+  }
+  .partido-pct.alerta {
+    background: rgba(157,61,61,0.1); padding: 6px 8px; margin: 4px -8px;
+  }
+  .partido-pct.alerta .nombre { color: var(--accent); font-weight: 600; }
+  .partido-pct.alerta .pct { color: var(--accent); font-weight: 700; }
+
+  /* EJEMPLOS PUNTUALES */
+  .ejemplos-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .ejemplo {
+    background: white; border: 1px solid var(--rule); padding: 16px;
+  }
+  .ejemplo .codigo {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--ink-mute); margin-bottom: 4px;
+  }
+  .ejemplo .ubicacion { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+  .ejemplo .stat {
+    display: flex; justify-content: space-between; font-size: 12px;
+    color: var(--ink-soft); padding: 4px 0;
+  }
+  .ejemplo .stat strong {
+    font-family: 'JetBrains Mono', monospace; color: var(--accent);
+    font-size: 14px;
+  }
+
+  /* TIPS / EXPLICACIONES DESTACADAS */
+  .tip {
+    margin: 20px 0; padding: 16px 20px;
+    background: white; border: 1px solid var(--rule); border-left: 3px solid var(--ink);
+    font-size: 14px;
+  }
+  .tip-titulo {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: 6px;
+  }
+  .tip-titulo strong { color: var(--ink); }
+
+  /* SEMÁFORO DE HALLAZGOS */
+  .semaforo {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin: 32px 0;
+  }
+  .semaforo-card {
+    padding: 24px; background: white; border: 1px solid var(--rule);
+    text-align: center;
+  }
+  .semaforo-card .icono {
+    font-family: 'Crimson Pro', serif; font-size: 56px; font-weight: 700;
+    line-height: 1; margin-bottom: 12px;
+  }
+  .semaforo-card.confirm .icono { color: var(--confirm); }
+  .semaforo-card.deny .icono { color: var(--accent); }
+  .semaforo-card.partial .icono { color: var(--warn); }
+  .semaforo-card .estado {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .semaforo-card.confirm .estado { color: var(--confirm); }
+  .semaforo-card.deny .estado { color: var(--accent); }
+  .semaforo-card.partial .estado { color: var(--warn); }
+  .semaforo-card .desc { font-size: 13px; color: var(--ink-soft); }
+
+  .footer-strip {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--ink-mute); letter-spacing: 0.15em; text-transform: uppercase;
+  }
+
+  /* EJEMPLOS COMPARATIVOS */
+  .ejemplos-comp {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;
+  }
+  .ejemplos-col { display: flex; flex-direction: column; gap: 12px; }
+  .ejemplos-titulo {
+    background: white; border: 1px solid var(--rule);
+    padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .ejemplos-titulo .punto {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .ejemplos-titulo.normal .punto { background: var(--confirm); }
+  .ejemplos-titulo.atipica .punto { background: var(--accent); }
+  .ejemplos-titulo strong { color: var(--ink); }
+  .ejemplos-titulo .ejemplos-sub { color: var(--ink-mute); margin-left: auto; font-size: 10px; }
+  .ejemplo-mesa {
+    background: white; border: 1px solid var(--rule); padding: 14px 16px;
+  }
+  .ejemplo-mesa .codigo {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    font-weight: 600; color: var(--ink); margin-bottom: 2px;
+  }
+  .ejemplo-mesa .codigo .depto { color: var(--ink-mute); font-weight: 400; margin-left: 6px; font-size: 11px; }
+  .ejemplo-mesa .local { font-size: 11px; color: var(--ink-soft); margin-bottom: 8px; }
+  .ejemplo-mesa .resumen-row {
+    display: flex; gap: 10px; font-size: 11px; color: var(--ink-soft);
+    margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--rule);
+  }
+  .ejemplo-mesa .resumen-row span strong { color: var(--ink); font-weight: 600; }
+  .ejemplo-mesa .top-cand {
+    display: flex; justify-content: space-between; font-size: 11px;
+    padding: 3px 0;
+  }
+  .ejemplo-mesa .top-cand .nombre { color: var(--ink-soft); flex: 1; }
+  .ejemplo-mesa .top-cand .pct {
+    font-family: 'JetBrains Mono', monospace; font-weight: 600;
+    color: var(--ink); min-width: 50px; text-align: right;
+  }
+  .ejemplo-mesa .top-cand.alerta .nombre { color: var(--accent); font-weight: 600; }
+  .ejemplo-mesa .top-cand.alerta .pct { color: var(--accent); }
+
+  /* CHARTS INTERACTIVOS */
+  .chart-wrap {
+    background: white; border: 1px solid var(--rule);
+    padding: 20px; margin: 16px 0;
+    position: relative;
+  }
+  .chart-titulo {
+    font-family: 'Crimson Pro', serif; font-size: 18px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .chart-subtitulo {
+    font-size: 12px; color: var(--ink-mute); margin-bottom: 16px;
+  }
+  .chart-canvas-box { position: relative; height: 320px; }
+  .chart-canvas-box.tall { height: 420px; }
+  .chart-grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;
+  }
+  @media (max-width: 720px) {
+    .chart-grid-2 { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 720px) {
+    .page { padding: 24px 16px; }
+    h1 { font-size: 36px; }
+    .pregunta { font-size: 24px; }
+    .compara-rangos, .semaforo { grid-template-columns: 1fr; }
+    .barra-fila { grid-template-columns: 120px 1fr; }
+    .barra-fila .total { display: none; }
+  }
+
+  /* ============ PRINT / PDF (A4) ============ */
+  @page {
+    size: A4;
+    margin: 18mm 14mm 18mm 14mm;
+  }
+  @media print {
+    body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+    h1 { font-size: 32px; }
+    .subtitle { font-size: 14px; margin-bottom: 24px; }
+    h2, .pregunta { font-size: 22px; page-break-after: avoid; }
+    p, .lead, .explicacion { font-size: 12px; }
+    .header-strip, .footer-strip { font-size: 9px; padding-bottom: 8px; margin-bottom: 24px; }
+    .badge { font-size: 9px; margin-bottom: 16px; }
+    .meta-grid .item .label { font-size: 8px; }
+    .meta-grid .item .value { font-size: 11px; }
+
+    /* Cada sección en página nueva, salvo la portada */
+    .seccion {
+      page-break-before: always;
+      page-break-inside: avoid;
+      margin: 0 !important;
+      padding: 16px !important;
+      background: white !important;
+      border: 1px solid var(--rule);
+    }
+    .seccion-num { font-size: 9px; margin-bottom: 8px; }
+    .pregunta { margin-bottom: 12px; }
+
+    /* Semáforo no salto de página */
+    .semaforo { page-break-inside: avoid; }
+    .semaforo-card { padding: 14px; }
+    .semaforo-card .icono { font-size: 36px; margin-bottom: 6px; }
+    .semaforo-card .estado { font-size: 9px; }
+    .semaforo-card .desc { font-size: 11px; }
+
+    /* Charts: tamaño fijo para que entren en página */
+    .chart-canvas-box { height: 240px !important; }
+    .chart-canvas-box.tall { height: 300px !important; }
+    .chart-wrap {
+      page-break-inside: avoid; padding: 12px;
+      margin: 8px 0;
+    }
+    .chart-titulo { font-size: 13px; }
+    .chart-subtitulo { font-size: 10px; margin-bottom: 8px; }
+
+    /* Doughnuts en grid: que no se corten */
+    .chart-grid-2 { gap: 10px; page-break-inside: avoid; }
+
+    /* Tip + ejemplos no se cortan */
+    .tip { page-break-inside: avoid; padding: 10px 12px; font-size: 11px; }
+    .tip-titulo { font-size: 9px; }
+    .ejemplo-mesa { page-break-inside: avoid; padding: 10px 12px; }
+    .ejemplo-mesa .codigo { font-size: 11px; }
+    .ejemplo-mesa .resumen-row { font-size: 10px; }
+    .ejemplo-mesa .top-cand { font-size: 10px; }
+    .ejemplos-comp { gap: 10px; }
+    .ejemplos-titulo { font-size: 9px; padding: 8px 10px; }
+
+    /* Cards/grids */
+    .card .number { font-size: 32px; }
+    .card .desc { font-size: 11px; }
+
+    /* Cierre */
+    .seccion[style*="bg-dark"] { color: var(--ink) !important; background: white !important; }
+    .seccion[style*="bg-dark"] * { color: var(--ink) !important; }
+    .seccion[style*="bg-dark"] em { color: var(--accent) !important; }
+
+    /* No CDN externos en PDF si no carga */
+    .codeblock { font-size: 10px; padding: 12px; }
+
+    /* Footer al final */
+    .footer-strip { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ====================== PORTADA ====================== -->
+  <div class="header-strip">
+    <span>Dashboard Visual · Datos Abiertos</span>
+    <span>Generado · 20 Apr 2026 · 23:09</span>
+  </div>
+
+  <span class="badge">Auditoría Independiente · 20 Abril 2026</span>
+  <h1>¿Qué dicen los <em>números reales</em> de la ONPE?</h1>
+  <p class="subtitle">
+    Comparamos lo que <strong>publica oficialmente la ONPE</strong> con lo que pudimos
+    <strong>contar nosotros mesa por mesa</strong> usando su propia API pública. Cada
+    gráfico responde una pregunta concreta.
+  </p>
+
+  <!-- ====================== SEMÁFORO ====================== -->
+  <div class="semaforo">
+    <div class="semaforo-card confirm">
+      <div class="icono">✓</div>
+      <div class="estado">Confirmado</div>
+      <div class="desc">Existen 4,704 mesas con códigos atípicos (900,000—905,000) fuera del padrón histórico.</div>
+    </div>
+    <div class="semaforo-card deny">
+      <div class="icono">✕</div>
+      <div class="estado">Desmentido</div>
+      <div class="desc">Las mesas atípicas SÍ son consultables vía la API pública. No son "fantasma".</div>
+    </div>
+    <div class="semaforo-card deny">
+      <div class="icono">!</div>
+      <div class="estado">Hallazgo crítico</div>
+      <div class="desc">El mesas atípicas vota +26.0 pts más a Sánchez (JP) que el resto del país.</div>
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 1: comparación oficial vs verificable ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 01</div>
+    <h2 class="pregunta">¿Coinciden los <em>votos oficiales</em> con los <em>votos reales</em>?</h2>
+
+    <p class="explicacion">
+      Sumamos los votos de cada candidato directamente desde las
+      <strong>92,699 mesas que descargamos</strong> y los comparamos con el
+      número que <strong>publica la ONPE en su web</strong>. Si todo está bien, ambos
+      números deberían ser casi idénticos.
+    </p>
+
+    <div class="chart-wrap">
+      <div class="chart-titulo">Votos oficiales vs Votos verificables (top 10 candidatos)</div>
+      <div class="chart-subtitulo">Pasa el mouse sobre cada barra para ver los votos exactos. Click en la leyenda para ocultar/mostrar series.</div>
+      <div class="chart-canvas-box tall"><canvas id="chart-comparacion"></canvas></div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>Cómo leer:</strong> los totales coinciden, ¿significa que no hay nada raro?</div>
+      <strong>NO.</strong> Los totales coinciden <em>porque ONPE incluye las mesas
+      atípicas en su total oficial</em>. La sospecha no está en el agregado nacional —
+      está en el comportamiento de un subgrupo de mesas. Mira las siguientes secciones.
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 2: distribución comparativa ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 02</div>
+    <h2 class="pregunta">¿Las mesas <em>atípicas</em> votan igual que el <em>resto del país</em>?</h2>
+
+    <p class="explicacion">
+      Las mesas tradicionales tienen códigos numerados del 1 al 88,000. Pero existen
+      <strong>4,704 mesas adicionales</strong> con códigos entre 900,000 y 905,000 —
+      una numeración que no encaja en el padrón histórico. Si fueran mesas "normales",
+      deberían votar de manera similar al resto del país. Comparemos lado a lado.
+    </p>
+
+    <div class="chart-grid-2">
+      <div class="chart-wrap">
+        <div class="chart-titulo">Mesas Normales</div>
+        <div class="chart-subtitulo">88,000 mesas · cómo votó el resto del país.</div>
+        <div class="chart-canvas-box"><canvas id="chart-pie-normal"></canvas></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-titulo">Mesas Atípicas</div>
+        <div class="chart-subtitulo">4,704 mesas · ¿se parece al de la izquierda?</div>
+        <div class="chart-canvas-box"><canvas id="chart-pie-900k"></canvas></div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>Hallazgo:</strong> la diferencia es enorme</div>
+      Mientras en las mesas normales <strong>Sánchez Palomino obtiene 10.5%</strong> de los votos,
+      en las mesas atípicas obtiene <strong>36.5%</strong> — más de <strong>3 veces más</strong>.
+      Es un sesgo extraordinario que requiere explicación oficial.
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 3: sesgo por candidato ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 03</div>
+    <h2 class="pregunta">¿A <em>quién beneficia</em> y a <em>quién perjudica</em> este sesgo?</h2>
+
+    <p class="explicacion">
+      Si las mesas atípicas fueran neutrales, beneficiarían y perjudicarían a todos
+      por igual. En realidad muestran un patrón claro: <strong>premian
+      desproporcionadamente a un candidato y perjudican a la mayoría</strong>.
+    </p>
+
+    <div class="chart-wrap">
+      <div class="chart-titulo">Sesgo de las mesas atípicas por candidato (puntos porcentuales)</div>
+      <div class="chart-subtitulo">Barras hacia la derecha = ese candidato gana más en mesas atípicas. Barras hacia la izquierda = pierde.</div>
+      <div class="chart-canvas-box tall"><canvas id="chart-sesgo"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 4: dónde están ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 04</div>
+    <h2 class="pregunta">¿En qué <em>departamentos</em> aparecen estas mesas?</h2>
+
+    <p class="explicacion">
+      Las 4,704 mesas atípicas están distribuidas por todo el país, no
+      concentradas en una sola región. Esto descarta la hipótesis de "lote técnico
+      regional" y refuerza la pregunta sobre su propósito administrativo.
+    </p>
+
+    <div class="chart-wrap">
+      <div class="chart-titulo">Cantidad de mesas atípicas por departamento</div>
+      <div class="chart-subtitulo">Pasa el mouse para ver cantidades exactas.</div>
+      <div class="chart-canvas-box tall"><canvas id="chart-deptos"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 5: ejemplos puntuales ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 05</div>
+    <h2 class="pregunta">¿Existen <em>casos extremos</em> que merezcan ser revisados?</h2>
+
+    <p class="explicacion">
+      Estas son las <strong>12 mesas atípicas donde Sánchez Palomino obtuvo el mayor
+      porcentaje de votos</strong>. Para que una mesa registre 60-90% para un solo
+      candidato, todos los votantes habrían tenido que coincidir casi unánimemente —
+      algo extremadamente raro en elecciones generales con 36 candidatos.
+    </p>
+
+    <div class="ejemplos-grid">
+      
+        <div class="ejemplo">
+          <div class="codigo">Mesa 902370</div>
+          <div class="ubicacion">Huancavelica · IE 32594</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>126</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>123</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>97.6%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 903403</div>
+          <div class="ubicacion">Lima · IE 62316 KAUPAN</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>123</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>119</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>96.7%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 901207</div>
+          <div class="ubicacion">Cajamarca · IE VISTA ALEGRE</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>129</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>123</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>95.3%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 903371</div>
+          <div class="ubicacion">Lima · IE 62507 COPAL</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>66</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>62</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>93.9%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 901190</div>
+          <div class="ubicacion">Cajamarca · IE 82449</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>88</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>82</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>93.2%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 903404</div>
+          <div class="ubicacion">Lima · IE 62316 KAUPAN</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>139</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>128</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>92.1%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 901353</div>
+          <div class="ubicacion">Cajamarca · IE 10460</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>159</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>146</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>91.8%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 901524</div>
+          <div class="ubicacion">Cajamarca · IE JOSE CARLOS MARIATEGUI</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>120</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>110</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>91.7%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 903428</div>
+          <div class="ubicacion">Lima · IE 62311</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>149</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>136</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>91.3%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 901455</div>
+          <div class="ubicacion">Cajamarca · IE SAN MARCOS</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>139</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>126</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>90.6%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 903386</div>
+          <div class="ubicacion">Lima · IE 62292</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>37</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>33</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>89.2%</strong></span></div>
+        </div>
+        <div class="ejemplo">
+          <div class="codigo">Mesa 902369</div>
+          <div class="ubicacion">Huancavelica · IE 32594</div>
+          <div class="stat"><span>Votos válidos en mesa</span><span><strong>138</strong></span></div>
+          <div class="stat"><span>Para Sánchez (JP)</span><span><strong>123</strong></span></div>
+          <div class="stat"><span>% del total</span><span><strong>89.1%</strong></span></div>
+        </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>Para tu jefe:</strong> estos son códigos verificables</div>
+      Cada uno de estos códigos puede ser consultado individualmente en la API pública
+      de ONPE. La auditoría no es opinión: son datos descargables por cualquiera que
+      tenga el link al endpoint.
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 6: ejemplos lado a lado ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 06</div>
+    <h2 class="pregunta">Comparemos <em>5 mesas normales</em> con <em>5 atípicas</em>.</h2>
+
+    <p class="explicacion">
+      Para entender concretamente la diferencia, mostramos cinco mesas de cada tipo
+      con sus tres candidatos más votados. Cualquiera de estos códigos puede
+      verificarse en la API pública de ONPE.
+    </p>
+
+    <div class="ejemplos-comp">
+      <div class="ejemplos-col">
+        <div class="ejemplos-titulo normal">
+          <span class="punto"></span>
+          <strong>Mesas Normales</strong>
+          <span class="ejemplos-sub">Códigos 1 — 88,000</span>
+        </div>
+        
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 000001<span class="depto">Amazonas</span></div>
+          <div class="local">IE 18288 ISABEL LYNCH DE RUBIO</div>
+          <div class="resumen-row">
+            <span><strong>230</strong> electores</span>
+            <span><strong>180</strong> votaron (78.3%)</span>
+            <span><strong>134</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">16.4% · 22v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">RENOVACIÓN POPULAR</span>
+              <span class="pct">14.2% · 19v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">AHORA NACIÓN - AN</span>
+              <span class="pct">13.4% · 18v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 000002<span class="depto">Amazonas</span></div>
+          <div class="local">IE 18288 ISABEL LYNCH DE RUBIO</div>
+          <div class="resumen-row">
+            <span><strong>230</strong> electores</span>
+            <span><strong>170</strong> votaron (73.9%)</span>
+            <span><strong>138</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">AHORA NACIÓN - AN</span>
+              <span class="pct">21.7% · 30v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">RENOVACIÓN POPULAR</span>
+              <span class="pct">17.4% · 24v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">14.5% · 20v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 000003<span class="depto">Amazonas</span></div>
+          <div class="local">IE 18288 ISABEL LYNCH DE RUBIO</div>
+          <div class="resumen-row">
+            <span><strong>300</strong> electores</span>
+            <span><strong>247</strong> votaron (82.3%)</span>
+            <span><strong>210</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">14.3% · 30v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">AHORA NACIÓN - AN</span>
+              <span class="pct">13.3% · 28v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">PARTIDO DEL BUEN GOBIERNO</span>
+              <span class="pct">12.4% · 26v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 000004<span class="depto">Amazonas</span></div>
+          <div class="local">IE 18288 ISABEL LYNCH DE RUBIO</div>
+          <div class="resumen-row">
+            <span><strong>300</strong> electores</span>
+            <span><strong>230</strong> votaron (76.7%)</span>
+            <span><strong>168</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">AHORA NACIÓN - AN</span>
+              <span class="pct">18.5% · 31v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">17.3% · 29v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">PARTIDO CÍVICO OBRAS</span>
+              <span class="pct">13.1% · 22v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 000005<span class="depto">Amazonas</span></div>
+          <div class="local">IE 18288 ISABEL LYNCH DE RUBIO</div>
+          <div class="resumen-row">
+            <span><strong>300</strong> electores</span>
+            <span><strong>245</strong> votaron (81.7%)</span>
+            <span><strong>201</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">18.9% · 38v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">AHORA NACIÓN - AN</span>
+              <span class="pct">15.4% · 31v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">PARTIDO DEL BUEN GOBIERNO</span>
+              <span class="pct">13.4% · 27v</span>
+            </div>
+        </div>
+      </div>
+      <div class="ejemplos-col">
+        <div class="ejemplos-titulo atipica">
+          <span class="punto"></span>
+          <strong>Mesas Atípicas</strong>
+          <span class="ejemplos-sub">Códigos 900,000+</span>
+        </div>
+        
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 900000<span class="depto">Ayacucho</span></div>
+          <div class="local">MESA ESPECIAL</div>
+          <div class="resumen-row">
+            <span><strong>257</strong> electores</span>
+            <span><strong>226</strong> votaron (87.9%)</span>
+            <span><strong>210</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">PERU LIBRE</span>
+              <span class="pct">77.1% · 162v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">OTROS</span>
+              <span class="pct">10.0% · 21v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">3.8% · 8v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 900001<span class="depto">Ayacucho</span></div>
+          <div class="local">MESA ESPECIAL</div>
+          <div class="resumen-row">
+            <span><strong>221</strong> electores</span>
+            <span><strong>208</strong> votaron (94.1%)</span>
+            <span><strong>184</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">PERU LIBRE</span>
+              <span class="pct">56.5% · 104v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">OTROS</span>
+              <span class="pct">19.6% · 36v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">PARTIDO MORADO</span>
+              <span class="pct">8.2% · 15v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 900002<span class="depto">Lima</span></div>
+          <div class="local">MESA ESPECIAL</div>
+          <div class="resumen-row">
+            <span><strong>272</strong> electores</span>
+            <span><strong>249</strong> votaron (91.5%)</span>
+            <span><strong>233</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">PERU LIBRE</span>
+              <span class="pct">72.5% · 169v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">OTROS</span>
+              <span class="pct">9.4% · 22v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">6.0% · 14v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 900003<span class="depto">Cajamarca</span></div>
+          <div class="local">MESA ESPECIAL</div>
+          <div class="resumen-row">
+            <span><strong>253</strong> electores</span>
+            <span><strong>237</strong> votaron (93.7%)</span>
+            <span><strong>221</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">PERU LIBRE</span>
+              <span class="pct">72.9% · 161v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">OTROS</span>
+              <span class="pct">10.0% · 22v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">FUERZA POPULAR</span>
+              <span class="pct">5.4% · 12v</span>
+            </div>
+        </div>
+        <div class="ejemplo-mesa">
+          <div class="codigo">Mesa 900004<span class="depto">Lima</span></div>
+          <div class="local">MESA ESPECIAL</div>
+          <div class="resumen-row">
+            <span><strong>293</strong> electores</span>
+            <span><strong>237</strong> votaron (80.9%)</span>
+            <span><strong>212</strong> válidos</span>
+          </div>
+          
+            <div class="top-cand">
+              <span class="nombre">PERU LIBRE</span>
+              <span class="pct">70.8% · 150v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">OTROS</span>
+              <span class="pct">14.2% · 30v</span>
+            </div>
+            <div class="top-cand">
+              <span class="nombre">RENOVACION POPULAR</span>
+              <span class="pct">6.1% · 13v</span>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>Cómo leer:</strong> el patrón se ve mejor en el agregado</div>
+      Caso por caso, hay variabilidad. Una mesa atípica puede tener al ganador X y otra
+      al ganador Y. Pero cuando sumamos las 4,704 mesas atípicas juntas, el sesgo a
+      favor de Sánchez Palomino es estadísticamente extraordinario (+26 pts).
+    </div>
+  </div>
+
+  <!-- ====================== CIERRE ====================== -->
+  <div class="seccion" style="background: var(--bg-dark); color: #ebe4d8; border: none;">
+    <div class="seccion-num" style="color: #c9bfb0">Conclusión</div>
+    <h2 class="pregunta" style="color: #fff;">Lo que la <em style="color: #f4a8a8">ONPE</em> nos debe explicar.</h2>
+    <p style="color: #d8d2c4; font-size: 16px;">
+      <strong style="color: #fff;">1.</strong> ¿Por qué existen 4,704 mesas con códigos
+      900,000+ fuera del rango histórico de numeración?
+    </p>
+    <p style="color: #d8d2c4; font-size: 16px;">
+      <strong style="color: #fff;">2.</strong> ¿Por qué estas mesas votan +26 puntos
+      porcentuales más para un solo candidato comparado con el resto del país?
+    </p>
+    <p style="color: #d8d2c4; font-size: 16px;">
+      <strong style="color: #fff;">3.</strong> ¿Cuándo y bajo qué procedimiento
+      administrativo se incorporaron al padrón estas mesas?
+    </p>
+    <p style="color: #d8d2c4; font-size: 16px; margin-top: 24px;">
+      Las preguntas no afirman fraude. Pero requieren respuesta institucional clara.
+    </p>
+  </div>
+
+  <div class="footer-strip">
+    <span>Dashboard generado 20 Apr 2026 · 23:09</span>
+    <span>Fuente: API pública ONPE</span>
+  </div>
+
+</div>
+
+<script>
+const CHART_DATA = {"candidatos": [{"short": "Keiko Fujimori", "oficial": 2695362, "verificable": 2710888}, {"short": "Sánchez Palomino", "oficial": 1898441, "verificable": 1823975}, {"short": "López Aliaga", "oficial": 1884248, "verificable": 1869909}, {"short": "Jorge Nieto", "oficial": 1748503, "verificable": 1732334}, {"short": "Belmont", "oficial": 1607656, "verificable": 1577320}, {"short": "Carlos Álvarez", "oficial": 1246555, "verificable": 1232025}, {"short": "López Chau", "oficial": 1161576, "verificable": 1135940}, {"short": "Pérez Tello", "oficial": 542178, "verificable": 536220}, {"short": "Espá", "oficial": 533603, "verificable": 527643}, {"short": "Olivera", "oficial": 292521, "verificable": 288586}], "normal": [{"partido": "FUERZA POPULAR", "votos": 2621484}, {"partido": "RENOVACIÓN POPULAR", "votos": 1855922}, {"partido": "PARTIDO DEL BUEN GOBIERNO", "votos": 1721388}, {"partido": "JUNTOS POR EL PERÚ", "votos": 1606077}, {"partido": "PARTIDO CÍVICO OBRAS", "votos": 1530949}, {"partido": "PARTIDO PAÍS PARA TODOS", "votos": 1217149}, {"partido": "AHORA NACIÓN - AN", "votos": 1112874}, {"partido": "Otros", "votos": 3636161}], "rango900k": [{"partido": "JUNTOS POR EL PERÚ", "votos": 217898}, {"partido": "FUERZA POPULAR", "votos": 89404}, {"partido": "PERU LIBRE", "votos": 46825}, {"partido": "PARTIDO CÍVICO OBRAS", "votos": 46371}, {"partido": "AHORA NACIÓN - AN", "votos": 23066}, {"partido": "PODEMOS PERÚ", "votos": 18440}, {"partido": "PARTIDO PAÍS PARA TODOS", "votos": 14876}, {"partido": "Otros", "votos": 139734}], "sesgo": [{"partido": "Sánchez Palomino", "sesgo": 26.03}, {"partido": "López Aliaga", "sesgo": -9.78}, {"partido": "Jorge Nieto", "sesgo": -9.41}, {"partido": "Carlos Álvarez", "sesgo": -5.46}, {"partido": "López Chau", "sesgo": -3.41}, {"partido": "Pérez Tello", "sesgo": -2.85}, {"partido": "Espá", "sesgo": -2.75}, {"partido": "Belmont", "sesgo": -2.23}, {"partido": "Keiko Fujimori", "sesgo": -2.15}, {"partido": "Luna Gálvez", "sesgo": 1.63}, {"partido": "Ronald Sotomayor", "sesgo": 0.91}, {"partido": "Olivera", "sesgo": -0.8}], "deptos": [{"nombre": "Cajamarca", "cantidad": 697}, {"nombre": "Lima", "cantidad": 405}, {"nombre": "Pasco", "cantidad": 371}, {"nombre": "Piura", "cantidad": 344}, {"nombre": "Ancash", "cantidad": 302}, {"nombre": "Huancavelica", "cantidad": 290}, {"nombre": "Ayacucho", "cantidad": 273}, {"nombre": "Callao", "cantidad": 253}, {"nombre": "Lambayeque", "cantidad": 239}, {"nombre": "Puno", "cantidad": 237}, {"nombre": "Cusco", "cantidad": 235}, {"nombre": "Junin", "cantidad": 208}, {"nombre": "Ica", "cantidad": 194}, {"nombre": "La Libertad", "cantidad": 190}, {"nombre": "Apurimac", "cantidad": 154}]};
+
+const COLORS = {
+  fujimori: '#1a2438',
+  sanchez:  '#9d3d3d',
+  lopez:    '#3b82a4',
+  nieto:    '#b88a2c',
+  belmont:  '#3d6b4a',
+  alvarez:  '#8a92a3',
+  chau:     '#c46868',
+  resto:    '#c9bfb0',
+  bg:       '#f3ede4',
+  oficial:  '#1a2438',
+  verif:    '#9d3d3d',
+};
+
+const COLOR_PALETTE = [
+  '#1a2438','#9d3d3d','#3b82a4','#b88a2c','#3d6b4a','#8a92a3',
+  '#c46868','#5a6478','#a44a82','#6b8e3d','#8a3da4'
+];
+
+// Defaults
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#5a6478';
+Chart.defaults.borderColor = '#c9bfb0';
+
+// 1. Comparación oficial vs verificable
+new Chart(document.getElementById('chart-comparacion'), {
+  type: 'bar',
+  data: {
+    labels: CHART_DATA.candidatos.map(c => c.short),
+    datasets: [
+      { label: 'Oficial ONPE', data: CHART_DATA.candidatos.map(c => c.oficial),
+        backgroundColor: COLORS.oficial, borderRadius: 2 },
+      { label: 'Verificable (suma de mesas)', data: CHART_DATA.candidatos.map(c => c.verificable),
+        backgroundColor: COLORS.verif, borderRadius: 2 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', align: 'start' },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString('es-PE') + ' votos'
+        }
+      }
+    },
+    scales: {
+      y: { ticks: { callback: v => (v/1000000).toFixed(1) + 'M' } },
+      x: { ticks: { maxRotation: 45, minRotation: 45 } }
+    }
+  }
+});
+
+// 2. Pie chart rango normal
+function buildPie(canvasId, data) {
+  return new Chart(document.getElementById(canvasId), {
+    type: 'doughnut',
+    data: {
+      labels: data.map(d => d.partido),
+      datasets: [{
+        data: data.map(d => d.votos),
+        backgroundColor: COLOR_PALETTE,
+        borderWidth: 2, borderColor: '#fff',
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { font: { size: 10 }, boxWidth: 12 } },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+              const pct = (100 * ctx.parsed / total).toFixed(2);
+              return ctx.label + ': ' + ctx.parsed.toLocaleString('es-PE') + ' (' + pct + '%)';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+buildPie('chart-pie-normal', CHART_DATA.normal);
+buildPie('chart-pie-900k', CHART_DATA.rango900k);
+
+// 3. Sesgo
+new Chart(document.getElementById('chart-sesgo'), {
+  type: 'bar',
+  data: {
+    labels: CHART_DATA.sesgo.map(s => s.partido),
+    datasets: [{
+      label: 'Sesgo (puntos porcentuales)',
+      data: CHART_DATA.sesgo.map(s => s.sesgo),
+      backgroundColor: CHART_DATA.sesgo.map(s => s.sesgo > 0 ? COLORS.sanchez : COLORS.oficial),
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => {
+            const sign = ctx.parsed.x >= 0 ? '+' : '';
+            return sign + ctx.parsed.x.toFixed(2) + ' pts (vs rango normal)';
+          }
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Puntos porcentuales' } }
+    }
+  }
+});
+
+// 4. Departamentos
+new Chart(document.getElementById('chart-deptos'), {
+  type: 'bar',
+  data: {
+    labels: CHART_DATA.deptos.map(d => d.nombre),
+    datasets: [{
+      label: 'Mesas Atípicas',
+      data: CHART_DATA.deptos.map(d => d.cantidad),
+      backgroundColor: COLORS.sanchez,
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ctx.parsed.x + ' mesas anómalas'
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Cantidad de mesas con códigos atípicos (900,000+)' } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

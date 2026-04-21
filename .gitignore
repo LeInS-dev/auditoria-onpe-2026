@@ -1,0 +1,10 @@
+# Solo subimos index.html, README.md y este .gitignore
+# Cualquier otro archivo lo ignoramos por seguridad
+
+# Excluir todo por defecto
+*
+
+# Whitelist explícita
+!.gitignore
+!index.html
+!README.md
