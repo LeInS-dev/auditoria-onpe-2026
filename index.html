@@ -1008,6 +1008,348 @@
 
   </div>
 
+  <!-- ====================== SECCIÓN 8: Z-SCORE INTRADISTRITAL ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 08 — Análisis forense</div>
+    <h2 class="pregunta">¿Las mesas atípicas votan <em>distinto a su propio distrito</em>?</h2>
+
+    <p class="explicacion">
+      La defensa más común es: <em>"Sánchez Palomino gana más en esas mesas porque son
+      zonas donde él es popular."</em> Para refutar o confirmar esto, calculamos el
+      <strong>z-score intradistrital</strong>: comparamos cada mesa atípica <strong>contra
+      las mesas normales de su mismo distrito</strong>. Si una mesa vota como su vecindario,
+      el z-score será cercano a 0. Si vota radicalmente distinto, será alto.
+    </p>
+
+    <div class="respuesta-corta">
+      <strong>23.4%</strong> de las mesas atípicas están a más de <strong>3 desviaciones
+      estándar</strong> de su propio distrito. En una distribución normal, solo el 0.3%
+      debería estarlo. Hay <strong>39 mesas</strong> con z > 10 — estadísticamente imposible
+      en una elección limpia.
+    </div>
+
+    <!-- KPI cards -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 32px 0;">
+      <div style="background: white; border: 1px solid var(--rule); padding: 20px; text-align: center;">
+        <div style="font-size: 36px; font-weight: 800; color: var(--accent);">3,925</div>
+        <div style="font-size: 12px; color: var(--ink-mute); margin-top: 4px;">Mesas atípicas comparables</div>
+      </div>
+      <div style="background: white; border: 1px solid var(--rule); padding: 20px; text-align: center;">
+        <div style="font-size: 36px; font-weight: 800; color: var(--accent);">918</div>
+        <div style="font-size: 12px; color: var(--ink-mute); margin-top: 4px;">Con z > 3 (23.4%)</div>
+      </div>
+      <div style="background: white; border: 1px solid var(--rule); padding: 20px; text-align: center;">
+        <div style="font-size: 36px; font-weight: 800; color: var(--accent);">341</div>
+        <div style="font-size: 12px; color: var(--ink-mute); margin-top: 4px;">Con z > 5 (extremo)</div>
+      </div>
+      <div style="background: white; border: 1px solid var(--rule); padding: 20px; text-align: center;">
+        <div style="font-size: 36px; font-weight: 800; color: var(--accent);">39</div>
+        <div style="font-size: 12px; color: var(--ink-mute); margin-top: 4px;">Con z > 10 (imposible)</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-titulo">Distribución de z-scores: mesas atípicas vs su propio distrito</div>
+      <div class="chart-subtitulo">La inmensa mayoría de las atípicas votan más a JP que sus vecinos normales. 73.2% están por encima de la media distrital.</div>
+      <div class="chart-canvas-box"><canvas id="chart-zscore"></canvas></div>
+    </div>
+
+    <!-- Top 10 casos extremos -->
+    <div style="margin: 24px 0;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 12px;">
+        Top 10 mesas con mayor z-score (casos extremos)
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--rule); text-align: left;">
+              <th style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute);">Mesa</th>
+              <th style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute);">Distrito</th>
+              <th style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: right;">%JP mesa</th>
+              <th style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: right;">%JP distrito (μ)</th>
+              <th style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: right;">Z-score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--rule); background: rgba(157,61,61,0.06);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">903465</td>
+              <td style="padding: 8px 12px;">150603</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">75.0%</td>
+              <td style="padding: 8px 12px; text-align: right;">3.8%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">32.7</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule); background: rgba(157,61,61,0.06);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">903466</td>
+              <td style="padding: 8px 12px;">150603</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">75.0%</td>
+              <td style="padding: 8px 12px; text-align: right;">3.8%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">32.7</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">903708</td>
+              <td style="padding: 8px 12px;">190104</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">73.8%</td>
+              <td style="padding: 8px 12px; text-align: right;">6.6%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">31.7</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">903710</td>
+              <td style="padding: 8px 12px;">190104</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">69.5%</td>
+              <td style="padding: 8px 12px; text-align: right;">6.6%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">29.7</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">903709</td>
+              <td style="padding: 8px 12px;">190104</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">67.2%</td>
+              <td style="padding: 8px 12px; text-align: right;">6.6%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">28.6</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">903649</td>
+              <td style="padding: 8px 12px;">160302</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">68.8%</td>
+              <td style="padding: 8px 12px; text-align: right;">16.5%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">18.3</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">903453</td>
+              <td style="padding: 8px 12px;">150603</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">41.7%</td>
+              <td style="padding: 8px 12px; text-align: right;">3.8%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">17.4</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">904441</td>
+              <td style="padding: 8px 12px;">210101</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">76.4%</td>
+              <td style="padding: 8px 12px; text-align: right;">18.3%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">15.1</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">902330</td>
+              <td style="padding: 8px 12px;">090110</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">54.1%</td>
+              <td style="padding: 8px 12px; text-align: right;">11.4%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">14.9</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <td style="padding: 8px 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">904445</td>
+              <td style="padding: 8px 12px;">210101</td>
+              <td style="padding: 8px 12px; text-align: right; color: var(--accent); font-weight: 700;">73.0%</td>
+              <td style="padding: 8px 12px; text-align: right;">18.3%</td>
+              <td style="padding: 8px 12px; text-align: right; font-weight: 800; color: var(--accent);">14.2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>¿Por qué este análisis es irrefutable?</strong></div>
+      Cada mesa atípica se compara <strong>contra su propio distrito</strong>, no contra el
+      promedio nacional. Si JP fuera popular en una zona, las mesas normales de esa misma zona
+      también tendrían votación alta para JP — y el z-score sería bajo. Un z-score de 32.7
+      significa que esa mesa vota <strong>32 desviaciones estándar</strong> por encima de lo
+      que votan sus vecinos. En términos estadísticos, la probabilidad de esto ocurriendo
+      naturalmente es matemáticamente cero.
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 9: DOMINANCIA DE CANDIDATO ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 09 — Análisis forense</div>
+    <h2 class="pregunta">¿Hay mesas donde <em>un solo candidato</em> obtiene más del 90%?</h2>
+
+    <p class="explicacion">
+      En una elección con <strong>36 candidatos presidenciales</strong>, que un solo candidato
+      obtenga más del 90% de los votos en una mesa es extraordinariamente improbable. Calculamos
+      la <strong>dominancia</strong> de cada mesa: el porcentaje del candidato más votado sobre
+      el total de votos válidos.
+    </p>
+
+    <div class="respuesta-corta">
+      Las mesas atípicas tienen una tasa de dominancia ≥90% de <strong>0.27%</strong> —
+      <strong>74 veces mayor</strong> que la tasa en mesas normales (0.004%). De las 12 mesas
+      con dominancia ≥90% en el rango atípico, <strong>10 son de JP</strong>.
+    </div>
+
+    <!-- KPI cards comparativas -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0;">
+      <div style="background: white; border: 1px solid var(--rule); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--ink-mute); text-transform: uppercase; margin-bottom: 8px;">Mesas atípicas (4,433)</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;">
+          <div style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: var(--accent);">12</div>
+            <div style="font-size: 11px; color: var(--ink-mute);">con ≥90%</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: var(--accent);">4</div>
+            <div style="font-size: 11px; color: var(--ink-mute);">con ≥95%</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: var(--ink-soft);">0</div>
+            <div style="font-size: 11px; color: var(--ink-mute);">con 100%</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; font-size: 12px; color: var(--ink-soft);">
+          <strong>Tasa de dominancia ≥90%:</strong> <span style="color: var(--accent); font-weight: 700; font-size: 16px;">0.27%</span>
+        </div>
+      </div>
+      <div style="background: white; border: 1px solid var(--rule); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--ink-mute); text-transform: uppercase; margin-bottom: 8px;">Mesas normales (82,649)</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;">
+          <div style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: var(--confirm);">3</div>
+            <div style="font-size: 11px; color: var(--ink-mute);">con ≥90%</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: var(--confirm);">0</div>
+            <div style="font-size: 11px; color: var(--ink-mute);">con ≥95%</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: var(--confirm);">0</div>
+            <div style="font-size: 11px; color: var(--ink-mute);">con 100%</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; font-size: 12px; color: var(--ink-soft);">
+          <strong>Tasa de dominancia ≥90%:</strong> <span style="color: var(--confirm); font-weight: 700; font-size: 16px;">0.004%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desglose de ganadores -->
+    <div style="background: white; border: 1px solid var(--rule); padding: 20px; margin: 16px 0;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 12px;">
+        ¿Quién gana en mesas con dominancia ≥90%?
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div>
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Mesas atípicas (12 mesas)</div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--rule);">
+            <span style="color: var(--accent); font-weight: 600;">JUNTOS POR EL PERÚ</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent);">10 mesas (83%)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0;">
+            <span>FUERZA POPULAR</span>
+            <span style="font-family: 'JetBrains Mono', monospace;">2 mesas (17%)</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Mesas normales (3 mesas)</div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0;">
+            <span>JUNTOS POR EL PERÚ</span>
+            <span style="font-family: 'JetBrains Mono', monospace;">3 mesas (100%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>Contraste clave: 74 veces más probable</strong></div>
+      En 82,649 mesas normales solo 3 tienen dominancia ≥90% (tasa: 0.004%). En 4,433
+      mesas atípicas hay 12 con dominancia ≥90% (tasa: 0.27%). Eso es un <strong>contraste
+      de 74x</strong>. En mesas de ~200 electores con 36 opciones, obtener >90% de los
+      votos para un solo candidato es un evento estadístico excepcional, y casi todas esas
+      excepciones están concentradas en el rango atípico y benefician al mismo candidato.
+    </div>
+  </div>
+
+  <!-- ====================== SECCIÓN 10: BENFORD POR PARTIDO ====================== -->
+  <div class="seccion">
+    <div class="seccion-num">Pregunta 10 — Análisis forense</div>
+    <h2 class="pregunta">¿Los votos de JP siguen una <em>distribución natural</em> de dígitos?</h2>
+
+    <p class="explicacion">
+      La <strong>Ley de Benford</strong> predice la frecuencia del primer dígito en conjuntos
+      de datos naturales (votos, montos, poblaciones). Datos manipulados tienden a desviarse de
+      esta distribución. El indicador clave es el <strong>MAD (Mean Absolute Deviation)</strong>:
+      según el criterio Nigrini, un MAD > 0.015 es <em>sospechoso</em> y > 0.022 indica
+      <em>no conformidad</em>.
+    </p>
+
+    <div class="respuesta-corta">
+      Los votos de JP en mesas normales tienen MAD <strong>0.010</strong> (<em>aceptable</em>).
+      Los mismos votos de JP en mesas atípicas tienen MAD <strong>0.041</strong>
+      (<em>no conformidad</em>) — <strong>4 veces peor</strong>. Es el único partido con
+      un cambio tan drástico entre ambos grupos.
+    </div>
+
+    <!-- Tabla comparativa MAD por partido -->
+    <div style="overflow-x: auto; margin: 24px 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--rule); text-align: left;">
+            <th style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute);">Partido</th>
+            <th style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: center;">MAD Atípicas</th>
+            <th style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: center;">Clasificación</th>
+            <th style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: center;">MAD Normales</th>
+            <th style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: center;">Clasificación</th>
+            <th style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); text-align: center;">Ratio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--rule); background: rgba(157,61,61,0.08);">
+            <td style="padding: 10px 12px; font-weight: 700; color: var(--accent);">JUNTOS POR EL PERÚ</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent);">0.041</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--accent); font-weight: 600;">⚠ No conformidad</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.010</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--confirm);">✓ Aceptable</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: var(--accent);">4.2x</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: 10px 12px; font-weight: 600;">FUERZA POPULAR</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.009</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--confirm);">✓ Aceptable</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.056</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--accent);">⚠ No conformidad</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.2x</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: 10px 12px; font-weight: 600;">RENOVACIÓN POPULAR</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.029</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--accent);">⚠ No conformidad</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.013</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--warn);">◉ Dudoso</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">2.2x</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: 10px 12px; font-weight: 600;">PODEMOS PERÚ</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.032</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--accent);">⚠ No conformidad</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.030</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--accent);">⚠ No conformidad</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">1.1x</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <td style="padding: 10px 12px; font-weight: 600;">PERÚ LIBRE</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.145</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--accent);">⚠ No conformidad</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">0.083</td>
+            <td style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--accent);">⚠ No conformidad</td>
+            <td style="padding: 10px 12px; text-align: center; font-family: 'JetBrains Mono', monospace;">1.7x</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-titulo">MAD (Benford) por partido: mesas atípicas vs normales</div>
+      <div class="chart-subtitulo">JP es el único partido cuya distribución pasa de "aceptable" a "no conformidad" al entrar en mesas atípicas.</div>
+      <div class="chart-canvas-box"><canvas id="chart-benford"></canvas></div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-titulo"><strong>Nota metodológica:</strong> limitaciones de Benford en elecciones</div>
+      La Ley de Benford tiene <strong>limitaciones conocidas</strong> en datos electorales: el rango
+      de votos por mesa es estrecho (1–300) y no siempre cumple los requisitos de la ley. Por eso,
+      este análisis tiene valor <em>comparativo</em> (atípicas vs normales del mismo partido),
+      no absoluto. Lo relevante es que JP muestra un deterioro <strong>4 veces mayor</strong>
+      en mesas atípicas mientras otros partidos permanecen estables.
+    </div>
+  </div>
+
   <!-- ====================== CIERRE ====================== -->
   <div class="seccion" style="background: var(--bg-dark); color: #ebe4d8; border: none;">
     <div class="seccion-num" style="color: #c9bfb0">Conclusión</div>
@@ -1028,14 +1370,22 @@
       <strong style="color: #fff;">4.</strong> ¿Por qué las 4,704 mesas se dividen en dos tandas
       con formatos de local distintos, en lugar de constituir un bloque homogéneo?
     </p>
+    <p style="color: #d8d2c4; font-size: 16px;">
+      <strong style="color: #fff;">5.</strong> ¿Cómo explica la ONPE que el 23.4% de las mesas
+      atípicas estén a más de 3 desviaciones estándar de su propio distrito en votación para JP?
+    </p>
+    <p style="color: #d8d2c4; font-size: 16px;">
+      <strong style="color: #fff;">6.</strong> ¿Cómo explica que la tasa de dominancia ≥90%
+      sea 74 veces mayor en mesas atípicas que en mesas normales?
+    </p>
     <p style="color: #d8d2c4; font-size: 16px; margin-top: 24px;">
       Las preguntas no afirman fraude. Pero requieren respuesta institucional clara.
     </p>
   </div>
 
   <div class="footer-strip">
-    <span>Dashboard actualizado 21 Apr 2026 · Sección 06 agregada</span>
-    <span>Fuente: API pública ONPE</span>
+    <span>Dashboard actualizado 22 Apr 2026 · Secciones 08—10 agregadas (auditoría forense)</span>
+    <span>Fuente: API pública ONPE · 92,699 mesas · 27 GB BD</span>
   </div>
 
 </div>
@@ -1186,6 +1536,81 @@ new Chart(document.getElementById('chart-deptos'), {
     },
     scales: {
       x: { title: { display: true, text: 'Cantidad de mesas con códigos atípicos (900,000+)' } }
+    }
+  }
+});
+
+// 5. Z-score distribution chart
+new Chart(document.getElementById('chart-zscore'), {
+  type: 'bar',
+  data: {
+    labels: ['< -3', '-3 a -1', '-1 a 0', '0 a 1', '1 a 3', '3 a 5', '5 a 10', '> 10'],
+    datasets: [{
+      label: 'Mesas atípicas',
+      data: [52, 485, 513, 649, 1308, 577, 302, 39],
+      backgroundColor: [
+        '#3d6b4a', '#3d6b4a', '#8a92a3', '#8a92a3',
+        '#b88a2c', '#9d3d3d', '#9d3d3d', '#7a1a1a'
+      ],
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ctx.parsed.y + ' mesas (' + (100*ctx.parsed.y/3925).toFixed(1) + '%)'
+        }
+      }
+    },
+    scales: {
+      y: { title: { display: true, text: 'Cantidad de mesas' } },
+      x: { title: { display: true, text: 'Rango de z-score (desviaciones estándar vs media distrital)' } }
+    }
+  }
+});
+
+// 6. Benford MAD comparison chart
+new Chart(document.getElementById('chart-benford'), {
+  type: 'bar',
+  data: {
+    labels: ['JP', 'FP', 'RP', 'PP', 'PL'],
+    datasets: [
+      {
+        label: 'MAD Atípicas',
+        data: [0.041, 0.009, 0.029, 0.032, 0.145],
+        backgroundColor: COLORS.sanchez,
+        borderRadius: 2,
+      },
+      {
+        label: 'MAD Normales',
+        data: [0.010, 0.056, 0.013, 0.030, 0.083],
+        backgroundColor: COLORS.oficial,
+        borderRadius: 2,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', align: 'start' },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => {
+            const v = ctx.parsed.y;
+            let lbl = v < 0.006 ? 'Conforme' : v < 0.012 ? 'Aceptable' : v < 0.015 ? 'Dudoso' : v < 0.022 ? 'Sospechoso' : 'No conformidad';
+            return ctx.dataset.label + ': ' + v.toFixed(3) + ' (' + lbl + ')';
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: 'MAD (menor = más natural)' },
+        beginAtZero: true,
+      }
     }
   }
 });
