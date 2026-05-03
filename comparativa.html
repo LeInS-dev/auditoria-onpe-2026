@@ -247,23 +247,31 @@
   <!-- SECCIÓN 2 — BARRAS COMPARATIVAS (atípicas vs normales) -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="seccion">
-    <div class="seccion-num">Sección 4.2 — Mesas 900K+ versus mesas normales</div>
-    <div class="pregunta">El desvío visto <em>en barras</em>: atípicas vs. normales</div>
+    <div class="seccion-num">Sección 4.2 — Partido favorecido: mesas 900K+ vs. mesas normales</div>
+    <div class="pregunta">El mismo desvío, <em>en dos elecciones distintas</em></div>
     <p class="explicacion">
-      Cada grupo de barras muestra el porcentaje del partido favorecido en mesas 900K+ (color sólido)
-      versus el mismo partido en mesas normales (color claro) para los tres escenarios.
-      La diferencia entre las barras de cada par es el desvío estadístico.
+      Cada par de barras compara al partido favorecido en mesas 900K+ (barra sólida) versus su resultado
+      en mesas normales del mismo proceso (barra rayada). El número rojo es la diferencia.
+      <strong>El patrón es idéntico:</strong> en 2021 y en 2026, el partido de izquierda que lidera cada proceso
+      obtiene entre 14 y 26 puntos porcentuales más en las mesas atípicas que en el resto.
     </p>
-    <div class="barras-wrap">
-      <canvas id="barras-comp"></canvas>
-    </div>
-    <div class="leyenda" style="margin-top:14px;">
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>2021 · Mesas 900K+ (Perú Libre)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#aac4e8;"></div>2021 · Mesas normales (Perú Libre)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>2026 nacional · Mesas 900K+ (Juntos PP)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#e0a8a8;"></div>2026 nacional · Mesas normales (Juntos PP)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#b87333;"></div>2026 Cajamarca · Mesas 900K+ (Juntos PP)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#e8c898;"></div>2026 Cajamarca · Mesas normales (Juntos PP)</div>
+
+    <!-- Gráfico de barras horizontales custom (SVG-free, puro HTML+CSS) -->
+    <div id="barras-custom" style="margin-top:24px;"></div>
+
+    <div class="leyenda" style="margin-top:18px;">
+      <div class="leyenda-item">
+        <div style="width:14px;height:14px;border-radius:2px;background:#1a2438;flex-shrink:0;"></div>
+        Mesas 900K+ (atípicas)
+      </div>
+      <div class="leyenda-item">
+        <div style="width:14px;height:14px;border-radius:2px;background:#c9bfb0;border:1px solid #a8a090;flex-shrink:0;"></div>
+        Mesas normales
+      </div>
+      <div class="leyenda-item">
+        <div style="width:14px;height:14px;border-radius:2px;background:#9d3d3d;flex-shrink:0;"></div>
+        Diferencia (desvío)
+      </div>
     </div>
   </div>
 
@@ -417,52 +425,94 @@ new Chart(document.getElementById('dona-caj').getContext('2d'), {
   }
 });
 
-// ─── BARRAS COMPARATIVAS ─────────────────────────────────────────────────────
-// Muestra el partido favorecido en 900K+ vs su % en mesas normales, por escenario
-new Chart(document.getElementById('barras-comp').getContext('2d'), {
-  type: 'bar',
-  data: {
-    labels: [
-      '2021 · Perú Libre\n(1ª vuelta · Nacional)',
-      '2026 · Juntos PP\n(1ª vuelta · Nacional)',
-      '2026 · Juntos PP\n(1ª vuelta · Cajamarca)',
-    ],
-    datasets: [
-      {
-        label: 'Mesas 900K+ (atípicas)',
-        data: [36.06, 36.52, 52.71],
-        backgroundColor: ['#2563a8', '#9d3d3d', '#b87333'],
-        borderWidth: 0, borderRadius: 3,
-      },
-      {
-        label: 'Mesas normales',
-        data: [19.65, 11.5, 37.84],
-        backgroundColor: ['#aac4e8', '#e0a8a8', '#e8c898'],
-        borderWidth: 0, borderRadius: 3,
-      }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%` }
-      }
+// ─── BARRAS CUSTOM ───────────────────────────────────────────────────────────
+// Muestra el patrón de similitud 2021 vs 2026 de forma clara
+(function() {
+  const escenarios = [
+    {
+      anio: '2021',
+      label: 'Perú Libre · 1ª Vuelta · Nacional',
+      partido: 'Perú Libre (Castillo)',
+      pct900k: 36.06,
+      pctNormal: 19.65,
+      diff: 16.41,
+      color900k: '#2563a8',
+      colorNorm: '#aac4e8',
     },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { font: { family: "'JetBrains Mono', monospace", size: 11 } }
-      },
-      y: {
-        beginAtZero: true, max: 65,
-        ticks: { callback: v => v + '%', font: { size: 11 } },
-        grid: { color: '#e8e0d4' }
-      }
-    }
-  }
-});
+    {
+      anio: '2026',
+      label: 'Juntos por el Perú · 1ª Vuelta · Nacional',
+      partido: 'Juntos por el Perú (Sánchez P.)',
+      pct900k: 36.52,
+      pctNormal: 11.5,
+      diff: 26.0,
+      color900k: '#9d3d3d',
+      colorNorm: '#e0a8a8',
+    },
+    {
+      anio: '2026',
+      label: 'Juntos por el Perú · 1ª Vuelta · Cajamarca',
+      partido: 'Juntos por el Perú — solo Cajamarca',
+      pct900k: 52.71,
+      pctNormal: 37.84,
+      diff: 14.87,
+      color900k: '#b87333',
+      colorNorm: '#e8c898',
+    },
+  ];
+
+  const MAX = 60;
+  const container = document.getElementById('barras-custom');
+
+  escenarios.forEach(e => {
+    const w900k  = (e.pct900k  / MAX * 100).toFixed(1);
+    const wNorm  = (e.pctNormal / MAX * 100).toFixed(1);
+    const wDiff  = (e.diff     / MAX * 100).toFixed(1);
+
+    container.innerHTML += `
+      <div style="margin-bottom:28px;">
+        <!-- Etiqueta -->
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8a92a3;min-width:36px;">${e.anio}</span>
+          <span style="font-size:13px;font-weight:600;color:#1a2438;">${e.partido}</span>
+        </div>
+
+        <!-- Barra 900K+ -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6478;min-width:110px;text-align:right;">Mesas 900K+</span>
+          <div style="flex:1;background:#f0ece4;border-radius:2px;height:26px;position:relative;">
+            <div style="width:${w900k}%;background:${e.color900k};height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;">
+              <span style="color:white;font-weight:700;font-size:13px;font-family:'Crimson Pro',serif;">${e.pct900k.toFixed(1)}%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra normal -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6478;min-width:110px;text-align:right;">Mesas normales</span>
+          <div style="flex:1;background:#f0ece4;border-radius:2px;height:26px;position:relative;">
+            <div style="width:${wNorm}%;background:${e.colorNorm};border:1px solid ${e.color900k}40;height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;">
+              <span style="color:#1a2438;font-weight:600;font-size:13px;font-family:'Crimson Pro',serif;">${e.pctNormal.toFixed(1)}%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra diferencia -->
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9d3d3d;min-width:110px;text-align:right;font-weight:600;">Diferencia</span>
+          <div style="flex:1;background:#f0ece4;border-radius:2px;height:20px;position:relative;">
+            <div style="width:${wDiff}%;background:#9d3d3d22;border:2px solid #9d3d3d;height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;">
+              <span style="color:#9d3d3d;font-weight:700;font-size:13px;font-family:'Crimson Pro',serif;">+${e.diff.toFixed(1)} pp</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Línea divisora (no en el último) -->
+        <div style="border-top:1px solid #c9bfb0;margin-top:18px;"></div>
+      </div>
+    `;
+  });
+})();
 </script>
 </body>
 </html>

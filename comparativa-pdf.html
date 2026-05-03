@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ONPE — Comparativa Serie 900K: 2021 vs 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  /* ── Variables ── */
+  :root {
+    --bg: #f3ede4;
+    --bg-card: #ebe4d8;
+    --bg-soft: #f7f1e8;
+    --ink: #1a2438;
+    --ink-soft: #5a6478;
+    --ink-mute: #8a92a3;
+    --rule: #c9bfb0;
+    --accent: #9d3d3d;
+    --c2021: #2563a8;
+    --c2026: #9d3d3d;
+    --c2026caj: #b87333;
+  }
+
+  /* ── Reset y base ── */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: white;
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── Botón de impresión (solo en pantalla) ── */
+  .btn-print {
+    position: fixed; top: 20px; right: 20px; z-index: 999;
+    background: var(--accent); color: white;
+    border: none; padding: 10px 20px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .btn-print:hover { background: #7a2d2d; }
+  @media print { .btn-print { display: none; } }
+
+  /* ── Hoja A4 ── */
+  .hoja {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 16mm 18mm 14mm;
+    background: var(--bg);
+    page-break-after: always;
+  }
+  .hoja:last-child { page-break-after: auto; }
+
+  @media print {
+    body { margin: 0; }
+    .hoja {
+      width: 210mm;
+      padding: 14mm 16mm 12mm;
+      page-break-after: always;
+    }
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  /* ── Cabecera de hoja ── */
+  .hoja-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.12em; color: var(--ink-soft); text-transform: uppercase;
+    border-bottom: 1px solid var(--rule); padding-bottom: 10px; margin-bottom: 20px;
+  }
+
+  /* ── Portada (hoja 1) ── */
+  .portada-badge {
+    display: inline-block; border: 1px solid var(--accent);
+    color: var(--accent); padding: 3px 10px; font-size: 9px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace; margin-bottom: 16px;
+  }
+  .portada-titulo {
+    font-family: 'Crimson Pro', serif; font-size: 38px; line-height: 1.1;
+    font-weight: 600; letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .portada-titulo em { color: var(--accent); font-style: italic; }
+  .portada-subtitulo {
+    font-family: 'Crimson Pro', serif; font-style: italic;
+    font-size: 15px; line-height: 1.55; color: var(--ink-soft);
+    margin-bottom: 28px; max-width: 140mm;
+  }
+  .portada-divisor {
+    border: none; border-top: 2px solid var(--rule); margin: 24px 0;
+  }
+
+  /* ── Tabla resumen portada ── */
+  .tabla-portada {
+    width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px;
+  }
+  .tabla-portada th {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
+    padding: 8px 10px; border-bottom: 2px solid var(--rule); text-align: left; font-weight: 500;
+  }
+  .tabla-portada th:not(:first-child) { text-align: center; }
+  .tabla-portada td { padding: 10px 10px; border-bottom: 1px solid var(--rule); }
+  .tabla-portada td:not(:first-child) { text-align: center; font-variant-numeric: tabular-nums; }
+  .tabla-portada tr.hl td { background: #fff7f0; font-weight: 600; }
+  .tabla-portada tr.hl td:first-child { border-left: 3px solid var(--accent); padding-left: 7px; }
+  .big-num { font-family: 'Crimson Pro', serif; font-size: 17px; font-weight: 700; }
+  .n-2021 { color: var(--c2021); }
+  .n-2026 { color: var(--c2026); }
+  .n-caj  { color: var(--c2026caj); }
+  .diff-badge {
+    display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    padding: 2px 6px; background: #fff3e8; color: var(--accent); border: 1px solid #e8c8a8;
+  }
+
+  /* ── Conclusión portada ── */
+  .conclusion {
+    padding: 16px 20px; margin-top: 20px;
+    border: 1px solid var(--rule); border-left: 4px solid var(--accent);
+    background: white;
+  }
+  .conclusion-titulo {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-mute); margin-bottom: 8px;
+  }
+  .conclusion p {
+    font-family: 'Crimson Pro', serif; font-size: 14px; line-height: 1.5;
+    margin: 0 0 8px 0;
+  }
+  .conclusion p:last-child { margin: 0; }
+
+  /* ── Secciones internas ── */
+  .seccion-titulo {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.15em; color: var(--ink-soft); text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .seccion-pregunta {
+    font-family: 'Crimson Pro', serif; font-size: 22px; line-height: 1.15;
+    font-weight: 600; margin-bottom: 12px;
+  }
+  .seccion-pregunta em { color: var(--accent); font-style: italic; }
+  .explicacion {
+    font-size: 12px; color: var(--ink-soft); margin-bottom: 14px; line-height: 1.6;
+  }
+  .explicacion strong { color: var(--ink); font-weight: 600; }
+
+  /* ── Tres donas ── */
+  .tres-cols {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0;
+  }
+  .grafica-card {
+    background: white; border: 1px solid var(--rule); padding: 14px;
+  }
+  .card-titulo {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px;
+  }
+  .card-sub { font-size: 11px; color: var(--ink-soft); margin-bottom: 10px; line-height: 1.3; }
+  .donut-wrap { position: relative; height: 160px; margin-bottom: 8px; }
+
+  /* ── Leyenda ── */
+  .leyenda {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    font-size: 10px; color: var(--ink-soft); line-height: 1.4;
+  }
+  .leyenda-item { display: flex; align-items: center; gap: 4px; }
+  .leyenda-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Barras ── */
+  .barras-wrap { position: relative; height: 260px; margin: 14px 0 10px; }
+
+  /* ── Footer de hoja ── */
+  .hoja-footer {
+    margin-top: auto; padding-top: 10px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.06em; color: var(--ink-mute); line-height: 1.7;
+    position: absolute; bottom: 14mm; left: 18mm; right: 18mm;
+  }
+
+  /* ── Separador visual entre secciones dentro de una hoja ── */
+  .sep { border: none; border-top: 1px solid var(--rule); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<button class="btn-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+
+<!-- ══════════════════════════════════════════════════════════════
+     HOJA 1 — PORTADA + TABLA RESUMEN + CONCLUSIÓN
+     ══════════════════════════════════════════════════════════════ -->
+<div class="hoja" style="position:relative; padding-bottom: 28mm;">
+
+  <div class="hoja-header">
+    <span>Auditoría ONPE · Elecciones Generales · Análisis independiente</span>
+    <span>Página 1 de 2 · 3 de mayo 2026</span>
+  </div>
+
+  <div class="portada-badge">Comparativa histórica · Serie 900K</div>
+  <h1 class="portada-titulo">La serie 900K en <em>dos elecciones distintas</em></h1>
+  <p class="portada-subtitulo">
+    En la primera vuelta de 2021 (18 candidatos), las 3.091 mesas con código ≥ 900.000
+    favorecieron a Perú Libre con +16,4 puntos sobre su resultado nacional.
+    En la primera vuelta de 2026 (más de 30 candidatos), las 4.704 mesas repiten el mismo fenómeno
+    con Juntos por el Perú: +26 puntos. Dos partidos distintos, el mismo mecanismo.
+  </p>
+
+  <hr class="portada-divisor">
+
+  <div class="seccion-titulo">Resumen numérico — Los tres escenarios</div>
+  <table class="tabla-portada">
+    <thead>
+      <tr>
+        <th>Escenario</th>
+        <th>Partido favorecido</th>
+        <th>En mesas 900K+</th>
+        <th>En mesas normales</th>
+        <th>Diferencia</th>
+        <th>N° mesas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="hl">
+        <td><strong>2021 · 1ª Vuelta · Nacional</strong></td>
+        <td>Perú Libre (Castillo)</td>
+        <td><span class="big-num n-2021">36,1%</span></td>
+        <td><span class="big-num">19,7%</span></td>
+        <td><span class="diff-badge">+16,4 pp</span></td>
+        <td>3.091</td>
+      </tr>
+      <tr class="hl">
+        <td><strong>2026 · 1ª Vuelta · Nacional</strong></td>
+        <td>Juntos por el Perú (Sánchez P.)</td>
+        <td><span class="big-num n-2026">36,5%</span></td>
+        <td><span class="big-num">~11,5%</span></td>
+        <td><span class="diff-badge">+26,0 pp</span></td>
+        <td>4.704</td>
+      </tr>
+      <tr class="hl">
+        <td><strong>2026 · 1ª Vuelta · Cajamarca</strong></td>
+        <td>Juntos por el Perú (Sánchez P.)</td>
+        <td><span class="big-num n-caj">52,7%</span></td>
+        <td><span class="big-num">37,8%</span></td>
+        <td><span class="diff-badge">+14,9 pp</span></td>
+        <td>697</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="conclusion">
+    <div class="conclusion-titulo">Pregunta para ONPE</div>
+    <p>
+      En la primera vuelta de 2021 las mesas 900K+ favorecieron a Perú Libre (+16,4 pp).
+      En la primera vuelta de 2026 favorecen a Juntos por el Perú (+26,0 pp).
+      Ambos partidos son ideológicamente opuestos con bases electorales distintas.
+    </p>
+    <p>
+      Lo que persiste entre elecciones no es el partido beneficiado, sino el mecanismo:
+      un bloque de mesas con numeración ≥ 900.000 que sistemáticamente concentra el voto
+      en el partido que lidera la izquierda en cada proceso.
+      ¿Qué característica comparten estas mesas que explica este comportamiento recurrente?
+    </p>
+  </div>
+
+  <div class="hoja-footer">
+    <div>Fuente 2021: Plataforma Nacional de Datos Abiertos — ONPE (datosabiertos.gob.pe) · Primera vuelta presidencial 11/04/2021</div>
+    <div>Fuente 2026: API pública ONPE (resultadoelectoral.onpe.gob.pe) · 92.699 mesas descargadas · Datos al 3 de mayo 2026</div>
+    <div>Análisis independiente. No afirma fraude; plantea preguntas para la autoridad electoral.</div>
+  </div>
+
+</div><!-- /hoja 1 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     HOJA 2 — DONAS + BARRAS
+     ══════════════════════════════════════════════════════════════ -->
+<div class="hoja" style="position:relative; padding-bottom: 28mm;">
+
+  <div class="hoja-header">
+    <span>Auditoría ONPE · Comparativa Serie 900K · 2021 vs 2026</span>
+    <span>Página 2 de 2 · 3 de mayo 2026</span>
+  </div>
+
+  <!-- Donas -->
+  <div class="seccion-titulo">Sección 4.1 — Distribución del voto en mesas 900K+ (por escenario)</div>
+  <h2 class="seccion-pregunta">¿Cómo se reparte el voto dentro de las mesas atípicas <em>en cada elección</em>?</h2>
+  <p class="explicacion">
+    Cada dona muestra el reparto de votos válidos <strong>solo dentro de las mesas con código ≥ 900.000</strong>.
+    El partido señalado en color principal es el que concentra votos de forma inusual respecto al resto del país.
+  </p>
+
+  <div class="tres-cols">
+    <div class="grafica-card">
+      <div class="card-titulo" style="color:var(--c2021);">2021 · 1ª Vuelta · Nacional</div>
+      <div class="card-sub">3.091 mesas · Favorecido: Perú Libre</div>
+      <div class="donut-wrap"><canvas id="dona-2021"></canvas></div>
+      <div class="leyenda">
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>Perú Libre 36,1%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#3d6b4a;"></div>Fuerza Pop. 15,3%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#b88a2c;"></div>Acción Pop. 9,9%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#8a92a3;"></div>Otros 38,7%</div>
+      </div>
+    </div>
+    <div class="grafica-card">
+      <div class="card-titulo" style="color:var(--c2026);">2026 · 1ª Vuelta · Nacional</div>
+      <div class="card-sub">4.704 mesas · Favorecido: Juntos por el Perú</div>
+      <div class="donut-wrap"><canvas id="dona-2026"></canvas></div>
+      <div class="leyenda">
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>Juntos P.P. 36,5%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#3d6b4a;"></div>Fuerza Pop. 15,0%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>Perú Libre 7,9%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#8a92a3;"></div>Otros 40,7%</div>
+      </div>
+    </div>
+    <div class="grafica-card">
+      <div class="card-titulo" style="color:var(--c2026caj);">2026 · 1ª Vuelta · Cajamarca</div>
+      <div class="card-sub">697 mesas · Favorecido: Juntos por el Perú</div>
+      <div class="donut-wrap"><canvas id="dona-caj"></canvas></div>
+      <div class="leyenda">
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#b87333;"></div>Juntos P.P. 52,7%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#3d6b4a;"></div>Fuerza Pop. 12,0%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>Perú Libre 8,9%</div>
+        <div class="leyenda-item"><div class="leyenda-dot" style="background:#8a92a3;"></div>Otros 26,4%</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- Barras -->
+  <div class="seccion-titulo">Sección 4.2 — Partido favorecido: mesas 900K+ vs. mesas normales</div>
+  <h2 class="seccion-pregunta">El mismo desvío en <em>dos elecciones distintas</em></h2>
+  <p class="explicacion">
+    Barra sólida oscura = partido favorecido en mesas 900K+.
+    Barra clara = mismo partido en mesas normales del mismo proceso.
+    Barra roja = diferencia (desvío). <strong>El patrón es idéntico en 2021 y 2026.</strong>
+  </p>
+  <div id="barras-pdf" style="margin-top:14px;"></div>
+  <div class="leyenda" style="margin-top:12px;">
+    <div class="leyenda-item"><div class="leyenda-dot" style="background:#1a2438;border-radius:2px;width:12px;height:12px;"></div>Mesas 900K+ (atípicas)</div>
+    <div class="leyenda-item"><div class="leyenda-dot" style="background:#c9bfb0;border:1px solid #a8a090;border-radius:2px;width:12px;height:12px;"></div>Mesas normales</div>
+    <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d22;border:2px solid #9d3d3d;border-radius:2px;width:12px;height:12px;"></div>Diferencia (desvío)</div>
+  </div>
+
+  <div class="hoja-footer">
+    <div>Fuente 2021: datosabiertos.gob.pe — ONPE · Primera vuelta presidencial 11/04/2021 · 3.091 mesas código ≥ 900.000</div>
+    <div>Fuente 2026: resultadoelectoral.onpe.gob.pe · 4.704 mesas código ≥ 900.000 · Datos al 3 de mayo 2026</div>
+  </div>
+
+</div><!-- /hoja 2 -->
+
+<script>
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.color = '#5a6478';
+
+// Esperar que las fuentes carguen antes de renderizar
+document.fonts.ready.then(() => {
+
+  // ─── DONA 2021 ───────────────────────────────────────────
+  new Chart(document.getElementById('dona-2021').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Perú Libre','Fuerza Popular','Acción Popular','Juntos P.P.','Al.Progreso','Part.Nac.','Avanza País','Otros'],
+      datasets: [{
+        data: [36.06, 15.31, 9.87, 6.73, 5.48, 5.16, 3.09, 18.30],
+        backgroundColor: ['#2563a8','#3d6b4a','#b88a2c','#9d3d3d','#7a8aaa','#5a6478','#c9bfb0','#e0d8cc'],
+        borderWidth: 0, hoverOffset: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '58%',
+      animation: { duration: 0 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
+      }
+    }
+  });
+
+  // ─── DONA 2026 ───────────────────────────────────────────
+  new Chart(document.getElementById('dona-2026').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Juntos por el Perú','Fuerza Popular','Perú Libre','Cívico Obras','Ahora Nación','Podemos Perú','País Para Todos','Renov. Pop.','Otros'],
+      datasets: [{
+        data: [36.52, 14.99, 7.85, 7.77, 3.87, 3.09, 2.49, 2.34, 21.08],
+        backgroundColor: ['#9d3d3d','#3d6b4a','#2563a8','#b88a2c','#5a6478','#8a92a3','#c9bfb0','#ebe4d8','#e0d8cc'],
+        borderWidth: 0, hoverOffset: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '58%',
+      animation: { duration: 0 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
+      }
+    }
+  });
+
+  // ─── DONA 2026 Cajamarca ─────────────────────────────────
+  new Chart(document.getElementById('dona-caj').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Juntos por el Perú','Fuerza Popular','Perú Libre','Cívico Obras','Podemos Perú','Ahora Nación','Al.Progreso','Otros'],
+      datasets: [{
+        data: [52.71, 12.01, 8.94, 5.51, 3.13, 1.68, 1.20, 14.82],
+        backgroundColor: ['#b87333','#3d6b4a','#2563a8','#b88a2c','#8a92a3','#5a6478','#c9bfb0','#e0d8cc'],
+        borderWidth: 0, hoverOffset: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '58%',
+      animation: { duration: 0 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
+      }
+    }
+  });
+
+  // ─── BARRAS CUSTOM PDF ───────────────────────────────────
+  const escenariosPdf = [
+    { anio:'2021', partido:'Perú Libre (Castillo)', label:'1ª Vuelta · Nacional', pct900k:36.06, pctNormal:19.65, diff:16.41, color900k:'#2563a8', colorNorm:'#aac4e8' },
+    { anio:'2026', partido:'Juntos por el Perú (Sánchez P.)', label:'1ª Vuelta · Nacional', pct900k:36.52, pctNormal:11.5, diff:26.0, color900k:'#9d3d3d', colorNorm:'#e0a8a8' },
+    { anio:'2026', partido:'Juntos por el Perú — Cajamarca', label:'1ª Vuelta · Cajamarca', pct900k:52.71, pctNormal:37.84, diff:14.87, color900k:'#b87333', colorNorm:'#e8c898' },
+  ];
+  const MAX_PDF = 60;
+  const contPdf = document.getElementById('barras-pdf');
+  escenariosPdf.forEach(e => {
+    const w900k = (e.pct900k / MAX_PDF * 100).toFixed(1);
+    const wNorm = (e.pctNormal / MAX_PDF * 100).toFixed(1);
+    const wDiff = (e.diff / MAX_PDF * 100).toFixed(1);
+    contPdf.innerHTML += `
+      <div style="margin-bottom:18px;">
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#8a92a3;min-width:32px;">${e.anio}</span>
+          <span style="font-size:12px;font-weight:600;color:#1a2438;">${e.partido}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#8a92a3;">${e.label}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6478;min-width:90px;text-align:right;">Mesas 900K+</span>
+          <div style="flex:1;background:#f0ece4;border-radius:2px;height:22px;">
+            <div style="width:${w900k}%;background:${e.color900k};height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+              <span style="color:white;font-weight:700;font-size:12px;font-family:'Crimson Pro',serif;">${e.pct900k.toFixed(1)}%</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6478;min-width:90px;text-align:right;">Mesas normales</span>
+          <div style="flex:1;background:#f0ece4;border-radius:2px;height:22px;">
+            <div style="width:${wNorm}%;background:${e.colorNorm};border:1px solid ${e.color900k}40;height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+              <span style="color:#1a2438;font-weight:600;font-size:12px;font-family:'Crimson Pro',serif;">${e.pctNormal.toFixed(1)}%</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#9d3d3d;min-width:90px;text-align:right;font-weight:600;">Diferencia</span>
+          <div style="flex:1;background:#f0ece4;border-radius:2px;height:18px;">
+            <div style="width:${wDiff}%;background:#9d3d3d15;border:2px solid #9d3d3d;height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+              <span style="color:#9d3d3d;font-weight:700;font-size:12px;font-family:'Crimson Pro',serif;">+${e.diff.toFixed(1)} pp</span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #c9bfb0;margin-top:14px;"></div>
+      </div>
+    `;
+  });
+
+}); // document.fonts.ready
+</script>
+</body>
+</html>
