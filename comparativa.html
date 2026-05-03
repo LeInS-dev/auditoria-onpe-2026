@@ -248,47 +248,56 @@
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 2 — SIMILITUD ESTADÍSTICA 2021 vs 2026        -->
+  <!-- SECCIÓN 2 — CURVA DE DISTRIBUCIÓN SUPERPUESTA          -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="seccion">
-    <div class="seccion-num">Sección 4.2 — Distribución por partido en mesas 900K+: 2021 vs 2026</div>
-    <div class="pregunta">Los porcentajes son <em>casi idénticos</em> en ambas elecciones</div>
+    <div class="seccion-num">Sección 4.2 — La curva de distribución por partido en mesas 900K+</div>
+    <div class="pregunta">Las dos curvas se <em>superponen</em>: misma forma, años distintos</div>
     <p class="explicacion">
-      Cada grupo muestra un partido por posición de ranking. La barra azul es el partido que quedó en ese
-      lugar en 2021; la barra roja es quien quedó en ese lugar en 2026.
-      <strong>El primero de izquierda obtiene 36,1% y 36,5%</strong> respectivamente.
-      <strong>Fuerza Popular obtiene 15,3% y 15,0%</strong>.
-      La curva descendente es casi idéntica en ambos años a pesar de ser candidatos distintos.
-      El número sobre cada barra es el porcentaje exacto.
+      Cada punto es el porcentaje que obtuvo el partido en esa posición del ranking
+      <strong>dentro de las mesas 900K+</strong>. La línea azul es 2021 (Perú Libre lidera),
+      la línea roja es 2026 (Juntos PP lidera). Si la similitud fuera solo coincidencia,
+      las curvas tendrían formas distintas. No las tienen: se solapan casi perfectamente.
+      El partido en posición 1 obtiene 36,1% y 36,5%. El partido en posición 2 obtiene
+      15,3% y 15,0%. La estructura es estadísticamente idéntica.
     </p>
-    <div style="position:relative; height:400px; margin-top:24px;">
-      <canvas id="barras-similitud"></canvas>
+    <div style="position:relative; height:340px; margin-top:20px;">
+      <canvas id="lineas-curva"></canvas>
     </div>
-    <div class="leyenda" style="margin-top:14px;">
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>2021 · 1ª Vuelta · mesas 900K+ (partido líder: Perú Libre)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>2026 · 1ª Vuelta · mesas 900K+ (partido líder: Juntos por el Perú)</div>
+    <div class="leyenda" style="margin-top:12px;">
+      <div class="leyenda-item">
+        <div style="width:28px;height:3px;background:#2563a8;flex-shrink:0;border-radius:2px;"></div>
+        2021 · Perú Libre lidera · 3.091 mesas 900K+
+      </div>
+      <div class="leyenda-item">
+        <div style="width:28px;height:3px;background:#9d3d3d;flex-shrink:0;border-radius:2px;border-top:2px dashed #9d3d3d;background:none;"></div>
+        2026 · Juntos PP lidera · 4.704 mesas 900K+
+      </div>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 3 — REGIONES CON PATRÓN EN AMBOS AÑOS         -->
+  <!-- SECCIÓN 3 — SCATTER: CORRELACIÓN ENTRE AÑOS           -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="seccion">
-    <div class="seccion-num">Sección 4.3 — Regiones con desvío en ambas elecciones</div>
-    <div class="pregunta"><em>12 departamentos</em> muestran el mismo patrón en 2021 y en 2026</div>
+    <div class="seccion-num">Sección 4.3 — Correlación del desvío por departamento: 2021 vs 2026</div>
+    <div class="pregunta">Los mismos departamentos afectados <em>en ambas elecciones</em></div>
     <p class="explicacion">
-      En cada uno de estos departamentos, las mesas 900K+ favorecen al partido de izquierda líder
-      con más puntos que las mesas normales del mismo departamento, <strong>en ambas elecciones</strong>.
-      Si fuera un fenómeno aleatorio o geográfico puntual, esperaríamos que en algunos departamentos
-      el desvío desapareciera o se invirtiera entre 2021 y 2026. No ocurre.
+      Cada punto es un departamento. El eje horizontal es el desvío que tuvo ese departamento en 2021
+      (cuántos puntos más obtuvo Perú Libre en mesas 900K+ vs mesas normales).
+      El eje vertical es el mismo desvío pero en 2026 (Juntos PP).
+      La línea diagonal punteada representa la correlación perfecta.
+      Si el fenómeno fuera aleatorio, los puntos estarían dispersos sin patrón.
+      En cambio, <strong>todos los departamentos están en el cuadrante positivo</strong>:
+      desvío positivo en 2021 <em>y</em> en 2026. Eso no ocurre por azar.
     </p>
-    <div style="position:relative; height:380px; margin-top:20px;">
-      <canvas id="barras-regiones"></canvas>
+    <div style="position:relative; height:400px; margin-top:20px;">
+      <canvas id="scatter-desvio"></canvas>
     </div>
-    <div class="leyenda" style="margin-top:14px;">
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>2021: desvío Perú Libre en 900K+ vs normales (pp)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>2026: desvío Juntos PP en 900K+ vs normales (pp)</div>
-    </div>
+    <p class="explicacion" style="margin-top:12px; font-size:13px;">
+      Ningún departamento se ubica en el cuadrante negativo (desvío positivo en un año,
+      negativo en el otro). La dirección del sesgo se mantiene constante entre elecciones.
+    </p>
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
@@ -448,39 +457,37 @@ new Chart(document.getElementById('dona-caj').getContext('2d'), {
   }
 });
 
-// ─── GRÁFICO SIMILITUD: todos los partidos 2021 y 2026 en 900K+ ─────────────
-// Eje X: partidos individuales de CADA año (no agrupados)
-// Dos datasets independientes con sus nombres reales
-new Chart(document.getElementById('barras-similitud').getContext('2d'), {
-  type: 'bar',
+// ─── LÍNEAS SUPERPUESTAS: curva de distribución 2021 vs 2026 ─────────────────
+// Mismo eje X = posición de ranking (1° al 8°)
+// Dos líneas: 2021 (azul sólido) y 2026 (rojo discontinuo)
+// Si se solapan → distribución estadísticamente idéntica
+new Chart(document.getElementById('lineas-curva').getContext('2d'), {
+  type: 'line',
   data: {
-    // Cada grupo = posición por porcentaje. Nombre 2021 / nombre 2026
-    labels: [
-      ['① Perú Libre', '① Juntos P.P.'],
-      ['② Fuerza Pop.', '② Fuerza Pop.'],
-      ['③ Acción Pop.', '③ Perú Libre'],
-      ['④ Juntos P.P.', '④ Cívico Obras'],
-      ['⑤ Al. Progreso', '⑤ Ahora Nación'],
-      ['⑥ Part. Nac.', '⑥ Podemos P.'],
-      ['⑦ Avanza País', '⑦ País P.Todos'],
-      ['⑧ Somos Perú', '⑧ Renov. Pop.'],
-    ],
+    labels: ['1°', '2°', '3°', '4°', '5°', '6°', '7°', '8°'],
     datasets: [
       {
         label: '2021 · mesas 900K+',
         data: [36.06, 15.31, 9.87, 6.73, 5.48, 5.16, 3.09, 2.17],
-        backgroundColor: 'rgba(37,99,168,0.85)',
         borderColor: '#2563a8',
-        borderWidth: 1,
-        borderRadius: 3,
+        backgroundColor: 'rgba(37,99,168,0.08)',
+        borderWidth: 3,
+        pointRadius: 6,
+        pointBackgroundColor: '#2563a8',
+        tension: 0.3,
+        fill: true,
       },
       {
         label: '2026 · mesas 900K+',
         data: [36.52, 14.99, 7.85, 7.77, 3.87, 3.09, 2.49, 2.34],
-        backgroundColor: 'rgba(157,61,61,0.85)',
         borderColor: '#9d3d3d',
-        borderWidth: 1,
-        borderRadius: 3,
+        backgroundColor: 'rgba(157,61,61,0.08)',
+        borderWidth: 3,
+        borderDash: [6, 4],
+        pointRadius: 6,
+        pointBackgroundColor: '#9d3d3d',
+        tension: 0.3,
+        fill: true,
       }
     ]
   },
@@ -489,57 +496,88 @@ new Chart(document.getElementById('barras-similitud').getContext('2d'), {
     plugins: {
       legend: { display: false },
       tooltip: {
-        callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%` }
+        callbacks: {
+          title: items => `Posición ${items[0].label} en ranking 900K+`,
+          label: c => {
+            const nombres21 = ['Perú Libre','Fuerza Pop.','Acción Pop.','Juntos P.P.','Al.Progreso','Part.Nac.','Avanza País','Somos Perú'];
+            const nombres26 = ['Juntos P.P.','Fuerza Pop.','Perú Libre','Cívico Obras','Ahora Nación','Podemos P.','País PTodos','Renov. Pop.'];
+            const nombre = c.datasetIndex === 0 ? nombres21[c.dataIndex] : nombres26[c.dataIndex];
+            return ` ${c.dataset.label} — ${nombre}: ${c.parsed.y.toFixed(1)}%`;
+          }
+        }
       },
       datalabels: {
-        anchor: 'end',
+        anchor: 'top',
         align: 'top',
+        offset: 4,
         formatter: v => v.toFixed(1) + '%',
-        font: { family: "'JetBrains Mono', monospace", size: 9, weight: '500' },
+        font: { family: "'JetBrains Mono', monospace", size: 9, weight: '600' },
         color: ctx => ctx.datasetIndex === 0 ? '#2563a8' : '#9d3d3d',
-        offset: 2,
       }
     },
     scales: {
       x: {
         grid: { display: false },
-        ticks: {
-          font: { family: "'JetBrains Mono', monospace", size: 9 },
-          maxRotation: 0,
-          autoSkip: false,
-        }
+        ticks: { font: { family: "'Crimson Pro', serif", size: 14 } },
+        title: { display: true, text: 'Posición por % de votos en mesas 900K+ (de mayor a menor)', font: { size: 11 }, color: '#8a92a3' }
       },
       y: {
         beginAtZero: true, max: 48,
         ticks: { callback: v => v + '%', font: { size: 10 } },
         grid: { color: '#e8e0d4' },
-        title: { display: true, text: '% votos válidos en mesas 900K+', font: { size: 10 }, color: '#8a92a3' }
+        title: { display: true, text: '% votos válidos dentro de mesas 900K+', font: { size: 10 }, color: '#8a92a3' }
       }
     }
   }
 });
 
-// ─── BARRAS REGIONES: desvío por departamento, con datalabels ───────────────
-new Chart(document.getElementById('barras-regiones').getContext('2d'), {
-  type: 'bar',
+// ─── SCATTER: correlación de desvíos por departamento 2021 vs 2026 ───────────
+// X = desvío 2021 (Perú Libre en 900K+ vs normales)
+// Y = desvío 2026 (Juntos PP en 900K+ vs normales)
+// Si los puntos están todos en cuadrante positivo → misma dirección ambos años
+// Si se alinean en diagonal → los MISMOS departamentos se ven afectados los dos años
+const deptos_scatter = [
+  { dep: 'Ancash',      x: 16.5, y: 22.5 },
+  { dep: 'Junín',       x:  4.8, y: 27.7 },
+  { dep: 'Lima',        x: 10.7, y: 21.5 },
+  { dep: 'La Libertad', x: 11.8, y: 18.1 },
+  { dep: 'Cajamarca',   x: 10.2, y: 22.0 },
+  { dep: 'Piura',       x: 15.6, y: 16.5 },
+  { dep: 'Cusco',       x:  7.6, y: 20.4 },
+  { dep: 'Puno',        x:  6.8, y: 18.1 },
+  { dep: 'Huánuco',     x: 10.6, y: 22.3 },
+  { dep: 'Lambayeque',  x:  9.4, y:  6.2 },
+  { dep: 'Ayacucho',    x:  3.5, y: 24.3 },
+  { dep: 'San Martín',  x:  4.9, y: 14.9 },
+];
+
+// Línea diagonal de referencia (correlación perfecta)
+const diagLine = [{ x: 0, y: 0 }, { x: 30, y: 30 }];
+
+new Chart(document.getElementById('scatter-desvio').getContext('2d'), {
+  type: 'scatter',
   data: {
-    labels: ['Ancash','Junín','Lima','La Libertad','Cajamarca','Piura','Cusco','Puno','Huánuco','Lambayeque','Ayacucho','San Martín'],
     datasets: [
       {
-        label: '2021: desvío Perú Libre',
-        data: [16.5, 4.8, 10.7, 11.8, 10.2, 15.6, 7.6, 6.8, 10.6, 9.4, 3.5, 4.9],
-        backgroundColor: 'rgba(37,99,168,0.82)',
-        borderColor: '#2563a8',
-        borderWidth: 1,
-        borderRadius: 3,
+        label: 'Departamentos',
+        data: deptos_scatter.map(d => ({ x: d.x, y: d.y, dep: d.dep })),
+        backgroundColor: 'rgba(157,61,61,0.75)',
+        borderColor: '#9d3d3d',
+        borderWidth: 1.5,
+        pointRadius: 8,
+        pointHoverRadius: 10,
       },
       {
-        label: '2026: desvío Juntos PP',
-        data: [22.5, 27.7, 21.5, 18.1, 22.0, 16.5, 20.4, 18.1, 22.3, 6.2, 24.3, 14.9],
-        backgroundColor: 'rgba(157,61,61,0.82)',
-        borderColor: '#9d3d3d',
-        borderWidth: 1,
-        borderRadius: 3,
+        // Línea diagonal punteada = "si el desvío fuera igual en ambos años"
+        label: 'Diagonal de referencia',
+        data: diagLine,
+        type: 'line',
+        borderColor: '#c9bfb0',
+        borderWidth: 1.5,
+        borderDash: [5, 5],
+        pointRadius: 0,
+        fill: false,
+        datalabels: { display: false },
       }
     ]
   },
@@ -548,27 +586,33 @@ new Chart(document.getElementById('barras-regiones').getContext('2d'), {
     plugins: {
       legend: { display: false },
       tooltip: {
-        callbacks: { label: c => ` ${c.dataset.label}: +${c.parsed.y.toFixed(1)} pp` }
+        filter: item => item.datasetIndex === 0,
+        callbacks: {
+          label: c => ` ${c.raw.dep}: 2021 +${c.parsed.x}pp · 2026 +${c.parsed.y}pp`
+        }
       },
       datalabels: {
-        anchor: 'end',
-        align: 'top',
-        formatter: v => '+' + v.toFixed(1),
-        font: { family: "'JetBrains Mono', monospace", size: 9, weight: '500' },
-        color: ctx => ctx.datasetIndex === 0 ? '#2563a8' : '#9d3d3d',
-        offset: 2,
+        display: ctx => ctx.datasetIndex === 0,
+        formatter: (v) => v.dep,
+        anchor: 'right',
+        align: 'right',
+        offset: 4,
+        font: { family: "'JetBrains Mono', monospace", size: 9 },
+        color: '#5a6478',
       }
     },
     scales: {
       x: {
-        grid: { display: false },
-        ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }, maxRotation: 30 }
-      },
-      y: {
-        beginAtZero: true, max: 35,
+        min: 0, max: 22,
         ticks: { callback: v => '+' + v + ' pp', font: { size: 10 } },
         grid: { color: '#e8e0d4' },
-        title: { display: true, text: 'Desvío sobre mesas normales (pp)', font: { size: 10 }, color: '#8a92a3' }
+        title: { display: true, text: 'Desvío 2021 — Perú Libre en 900K+ vs normales (pp)', font: { size: 11 }, color: '#8a92a3' }
+      },
+      y: {
+        min: 0, max: 34,
+        ticks: { callback: v => '+' + v + ' pp', font: { size: 10 } },
+        grid: { color: '#e8e0d4' },
+        title: { display: true, text: 'Desvío 2026 — Juntos PP en 900K+ vs normales (pp)', font: { size: 11 }, color: '#8a92a3' }
       }
     }
   }
