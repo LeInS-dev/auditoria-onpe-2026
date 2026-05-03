@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Auditoría ONPE — Comparativa 2021 vs 2026: Serie 900K (Página 4)</title>
-<meta name="description" content="Comparación del comportamiento de las mesas con código 900.000+ entre las elecciones de 2021 y 2026. En ambos casos, el partido favorecido en estas mesas supera ampliamente su resultado en mesas normales.">
+<meta name="description" content="El mismo patrón en dos elecciones distintas: mesas con código 900K+ favorecen sistemáticamente a un partido. En 2021 fue Perú Libre (+16 pp); en 2026 es Juntos por el Perú (+26 pp).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -11,7 +11,6 @@
 <style>
   :root {
     --bg: #f3ede4;
-    --bg-dark: #1a2438;
     --bg-card: #ebe4d8;
     --bg-soft: #f7f1e8;
     --ink: #1a2438;
@@ -19,8 +18,6 @@
     --ink-mute: #8a92a3;
     --rule: #c9bfb0;
     --accent: #9d3d3d;
-    --confirm: #3d6b4a;
-    --warn: #b88a2c;
     --c2021: #2563a8;
     --c2026: #9d3d3d;
     --c2026caj: #b87333;
@@ -77,7 +74,7 @@
   }
   .pregunta {
     font-family: 'Crimson Pro', serif; font-size: 30px; line-height: 1.15;
-    font-weight: 600; margin: 0 0 20px 0; color: var(--ink);
+    font-weight: 600; margin: 0 0 20px 0;
   }
   .pregunta em { color: var(--accent); font-style: italic; }
   .respuesta-corta {
@@ -91,73 +88,60 @@
   }
   .explicacion strong { color: var(--ink); font-weight: 600; }
 
-  /* ─── Tarjetas de año ─── */
-  .year-chips {
-    display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px;
-  }
-  .year-chip {
-    padding: 6px 16px; font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-    border: 2px solid; font-weight: 500;
-  }
-  .chip-2021 { color: var(--c2021); border-color: var(--c2021); }
-  .chip-2026 { color: var(--c2026); border-color: var(--c2026); }
-  .chip-2026caj { color: var(--c2026caj); border-color: var(--c2026caj); }
-
-  /* ─── Layout 3 gráficas lado a lado ─── */
-  .tres-graficas {
+  /* ─── Grid de 3 tarjetas ─── */
+  .tres-cols {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin: 40px 0;
+    gap: 20px;
+    margin: 32px 0;
   }
-  @media (max-width: 720px) {
-    .tres-graficas { grid-template-columns: 1fr; }
-  }
-  .grafica-card {
-    border: 1px solid var(--rule); background: white; padding: 20px;
-  }
-  .grafica-titulo {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .grafica-subtitulo {
-    font-size: 13px; color: var(--ink-soft); margin-bottom: 16px; line-height: 1.4;
-  }
-  .grafica-wrap { position: relative; height: 240px; }
+  @media (max-width: 700px) { .tres-cols { grid-template-columns: 1fr; } }
 
-  /* ─── Tabla comparativa grande ─── */
+  .grafica-card {
+    background: white; border: 1px solid var(--rule); padding: 20px;
+  }
+  .card-titulo {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 12px; color: var(--ink-soft); margin-bottom: 14px; line-height: 1.4;
+  }
+  .donut-wrap { position: relative; height: 200px; margin-bottom: 8px; }
+
+  /* ─── Leyenda ─── */
+  .leyenda {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;
+    font-size: 11px; color: var(--ink-soft); line-height: 1.4;
+  }
+  .leyenda-item { display: flex; align-items: center; gap: 5px; }
+  .leyenda-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── Gráfica de barras comparativas ─── */
+  .barras-wrap { position: relative; height: 360px; margin-top: 24px; }
+
+  /* ─── Tabla ─── */
   .tabla-comp {
-    width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 14px;
+    width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 14px;
   }
   .tabla-comp th {
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
-    padding: 10px 14px; border-bottom: 2px solid var(--rule); text-align: left;
-    font-weight: 500;
+    padding: 10px 14px; border-bottom: 2px solid var(--rule); text-align: left; font-weight: 500;
   }
   .tabla-comp th:not(:first-child) { text-align: center; }
-  .tabla-comp td {
-    padding: 12px 14px; border-bottom: 1px solid var(--rule); line-height: 1.3;
-  }
+  .tabla-comp td { padding: 11px 14px; border-bottom: 1px solid var(--rule); }
   .tabla-comp td:not(:first-child) { text-align: center; font-variant-numeric: tabular-nums; }
-  .tabla-comp tr.highlight td { background: #fff7f0; font-weight: 600; }
-  .tabla-comp tr.highlight td:first-child { border-left: 3px solid var(--accent); padding-left: 11px; }
-  .num-2021 { color: var(--c2021); font-weight: 700; font-size: 16px; font-family: 'Crimson Pro', serif; }
-  .num-2026 { color: var(--c2026); font-weight: 700; font-size: 16px; font-family: 'Crimson Pro', serif; }
-  .num-caj  { color: var(--c2026caj); font-weight: 700; font-size: 16px; font-family: 'Crimson Pro', serif; }
-  .diff-tag {
+  .tabla-comp tr.hl td { background: #fff7f0; font-weight: 600; }
+  .tabla-comp tr.hl td:first-child { border-left: 3px solid var(--accent); padding-left: 11px; }
+  .big-num { font-family: 'Crimson Pro', serif; font-size: 18px; font-weight: 700; }
+  .n-2021 { color: var(--c2021); }
+  .n-2026 { color: var(--c2026); }
+  .n-caj  { color: var(--c2026caj); }
+  .diff-badge {
     display: inline-block; font-size: 11px; font-family: 'JetBrains Mono', monospace;
     padding: 2px 7px; background: #fff3e8; color: var(--accent); border: 1px solid #e8c8a8;
   }
-
-  /* ─── Nota metodológica ─── */
-  .nota {
-    padding: 20px 24px; border: 1px solid var(--rule); border-left: 3px solid var(--ink-mute);
-    background: white; margin: 32px 0; font-size: 14px; color: var(--ink-soft); line-height: 1.7;
-  }
-  .nota strong { color: var(--ink); }
 
   /* ─── Conclusión ─── */
   .conclusion {
@@ -176,22 +160,12 @@
   }
   .conclusion p:last-child { margin: 0; }
 
-  /* ─── Footer ─── */
   .footer {
     margin-top: 80px; padding-top: 24px;
     border-top: 1px solid var(--rule);
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
     letter-spacing: 0.08em; color: var(--ink-mute); line-height: 1.8;
   }
-
-  /* ─── Leyenda ─── */
-  .leyenda {
-    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft);
-  }
-  .leyenda-item { display: flex; align-items: center; gap: 6px; }
-  .leyenda-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -199,16 +173,16 @@
 
   <div class="header-strip">
     <span>Auditoría ONPE · Elecciones Generales</span>
-    <span>Comparativa 2021 vs 2026 — Página 4 de 4</span>
+    <span>Comparativa histórica — Página 4 de 4</span>
   </div>
 
   <div class="badge">Comparativa histórica</div>
-  <h1>La serie 900K se repite: <em>2021 y 2026</em></h1>
+  <h1>La serie 900K en <em>dos elecciones distintas</em></h1>
   <p class="subtitle">
-    En las elecciones de 2021 (segunda vuelta) existían 3.074 mesas con código ≥ 900.000.
-    En todas ellas, Perú Libre (Castillo) obtuvo casi 20 puntos porcentuales más que en el resto del país.
-    En 2026, el mismo fenómeno ocurre con Juntos por el Perú (Sánchez Palomino).
-    Las tres gráficas siguientes permiten comparar visualmente los tres escenarios.
+    En la primera vuelta de 2021 (18 candidatos), las 3.091 mesas con código ≥ 900.000
+    favorecieron a Perú Libre con +16,4 puntos sobre su resultado nacional.
+    En 2026 (más de 30 candidatos), las 4.704 mesas repiten el fenómeno con Juntos por el Perú: +26 puntos.
+    Dos partidos distintos, el mismo mecanismo.
   </p>
 
   <div class="nav-row">
@@ -218,319 +192,253 @@
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 1 – LAS TRES GRÁFICAS                         -->
+  <!-- SECCIÓN 1 — TRES DONAS                                 -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="seccion">
-    <div class="seccion-num">Sección 4.1</div>
-    <div class="pregunta">Tres escenarios, <em>el mismo patrón</em></div>
+    <div class="seccion-num">Sección 4.1 — Distribución del voto en mesas 900K+</div>
+    <div class="pregunta">¿Cómo se distribuye el voto en las mesas atípicas<em> en cada elección</em>?</div>
     <p class="explicacion">
-      Cada gráfica muestra la distribución de votos válidos <strong>solo entre las mesas con código ≥ 900.000</strong>
-      para el escenario indicado. El partido señalado en rojo es el que concentra votos de forma inusual.
+      Cada dona muestra el reparto de votos válidos <strong>solo dentro de las mesas con código ≥ 900.000</strong>
+      para ese escenario. El partido señalado en color principal es el que concentra votos de forma inusual.
     </p>
 
-    <div class="year-chips">
-      <span class="year-chip chip-2021">2021 — Serie 900K · Nacional</span>
-      <span class="year-chip chip-2026">2026 — Serie 900K · Nacional</span>
-      <span class="year-chip chip-2026caj">2026 — Serie 900K · Solo Cajamarca</span>
-    </div>
+    <div class="tres-cols">
 
-    <div class="tres-graficas">
-
-      <!-- Gráfica A: 2021 nacional 900K+ -->
       <div class="grafica-card">
-        <div class="grafica-titulo" style="color: var(--c2021);">2021 · 900K+ · Nacional</div>
-        <div class="grafica-subtitulo">3.074 mesas atípicas<br>Partido favorecido: Perú Libre</div>
-        <div class="grafica-wrap">
-          <canvas id="chart-2021-900k"></canvas>
-        </div>
-        <div class="leyenda" style="margin-top:12px;">
-          <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div> Perú Libre</div>
-          <div class="leyenda-item"><div class="leyenda-dot" style="background:#5a6478;"></div> Fuerza Popular</div>
+        <div class="card-titulo" style="color:var(--c2021);">2021 · 1ª Vuelta · Nacional</div>
+        <div class="card-sub">3.091 mesas · Favorecido: Perú Libre</div>
+        <div class="donut-wrap"><canvas id="dona-2021"></canvas></div>
+        <div class="leyenda">
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>Perú Libre 36,1%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#3d6b4a;"></div>Fuerza Pop. 15,3%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#b88a2c;"></div>Acción Pop. 9,9%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#8a92a3;"></div>Otros 38,7%</div>
         </div>
       </div>
 
-      <!-- Gráfica B: 2026 nacional 900K+ -->
       <div class="grafica-card">
-        <div class="grafica-titulo" style="color: var(--c2026);">2026 · 900K+ · Nacional</div>
-        <div class="grafica-subtitulo">4.704 mesas atípicas<br>Partido favorecido: Juntos por el Perú</div>
-        <div class="grafica-wrap">
-          <canvas id="chart-2026-900k"></canvas>
-        </div>
-        <div class="leyenda" style="margin-top:12px;">
-          <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div> Juntos por el Perú</div>
-          <div class="leyenda-item"><div class="leyenda-dot" style="background:#c8b8a8;"></div> Resto</div>
+        <div class="card-titulo" style="color:var(--c2026);">2026 · 1ª Vuelta · Nacional</div>
+        <div class="card-sub">4.704 mesas · Favorecido: Juntos por el Perú</div>
+        <div class="donut-wrap"><canvas id="dona-2026"></canvas></div>
+        <div class="leyenda">
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>Juntos P.P. 36,5%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#3d6b4a;"></div>Fuerza Pop. 15,0%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>Perú Libre 7,9%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#8a92a3;"></div>Otros 40,7%</div>
         </div>
       </div>
 
-      <!-- Gráfica C: 2026 Cajamarca 900K+ -->
       <div class="grafica-card">
-        <div class="grafica-titulo" style="color: var(--c2026caj);">2026 · 900K+ · Cajamarca</div>
-        <div class="grafica-subtitulo">697 mesas atípicas<br>Partido favorecido: Juntos por el Perú</div>
-        <div class="grafica-wrap">
-          <canvas id="chart-2026-caj"></canvas>
-        </div>
-        <div class="leyenda" style="margin-top:12px;">
-          <div class="leyenda-item"><div class="leyenda-dot" style="background:#b87333;"></div> Juntos por el Perú</div>
-          <div class="leyenda-item"><div class="leyenda-dot" style="background:#c8b8a8;"></div> Resto</div>
+        <div class="card-titulo" style="color:var(--c2026caj);">2026 · 1ª Vuelta · Cajamarca</div>
+        <div class="card-sub">697 mesas · Favorecido: Juntos por el Perú</div>
+        <div class="donut-wrap"><canvas id="dona-caj"></canvas></div>
+        <div class="leyenda">
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#b87333;"></div>Juntos P.P. 52,7%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#3d6b4a;"></div>Fuerza Pop. 12,0%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>Perú Libre 8,9%</div>
+          <div class="leyenda-item"><div class="leyenda-dot" style="background:#8a92a3;"></div>Otros 26,4%</div>
         </div>
       </div>
 
-    </div><!-- /tres-graficas -->
-
-    <div class="nota">
-      <strong>Nota metodológica:</strong> Las gráficas A y B no son directamente comparables en número de partidos
-      porque en 2021 la segunda vuelta tenía solo dos candidatos, mientras que en 2026 hay más de 30.
-      Lo que se compara es el <em>patrón</em>: en ambos casos, un único partido concentra
-      una proporción anormalmente alta del voto en las mesas 900K+.
     </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 2 – TABLA COMPARATIVA                         -->
+  <!-- SECCIÓN 2 — BARRAS COMPARATIVAS (atípicas vs normales) -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="seccion">
-    <div class="seccion-num">Sección 4.2</div>
-    <div class="pregunta">Los números en perspectiva</div>
+    <div class="seccion-num">Sección 4.2 — Mesas 900K+ versus mesas normales</div>
+    <div class="pregunta">El desvío visto <em>en barras</em>: atípicas vs. normales</div>
     <p class="explicacion">
-      La tabla consolida el porcentaje del partido favorecido en mesas 900K+ frente
-      a las mesas normales, para los tres escenarios.
+      Cada grupo de barras muestra el porcentaje del partido favorecido en mesas 900K+ (color sólido)
+      versus el mismo partido en mesas normales (color claro) para los tres escenarios.
+      La diferencia entre las barras de cada par es el desvío estadístico.
     </p>
+    <div class="barras-wrap">
+      <canvas id="barras-comp"></canvas>
+    </div>
+    <div class="leyenda" style="margin-top:14px;">
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>2021 · Mesas 900K+ (Perú Libre)</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#aac4e8;"></div>2021 · Mesas normales (Perú Libre)</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>2026 nacional · Mesas 900K+ (Juntos PP)</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#e0a8a8;"></div>2026 nacional · Mesas normales (Juntos PP)</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#b87333;"></div>2026 Cajamarca · Mesas 900K+ (Juntos PP)</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#e8c898;"></div>2026 Cajamarca · Mesas normales (Juntos PP)</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 3 — TABLA RESUMEN                              -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="seccion">
+    <div class="seccion-num">Sección 4.3 — Resumen numérico</div>
+    <div class="pregunta">Los tres escenarios en <em>una tabla</em></div>
 
     <table class="tabla-comp">
       <thead>
         <tr>
           <th>Escenario</th>
           <th>Partido favorecido</th>
-          <th>En mesas 900K+</th>
-          <th>En mesas normales</th>
+          <th>En 900K+</th>
+          <th>En normales</th>
           <th>Diferencia</th>
           <th>Mesas 900K+</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="highlight">
-          <td><strong>2021 · Nacional</strong><br><span style="font-size:12px;color:var(--ink-mute);">2ª vuelta presidencial</span></td>
-          <td>Perú Libre<br><span style="font-size:12px;color:var(--ink-mute);">Pedro Castillo</span></td>
-          <td><span class="num-2021">69,5%</span></td>
-          <td><span style="font-family:'Crimson Pro',serif;font-size:16px;">49,6%</span></td>
-          <td><span class="diff-tag">+19,9 pp</span></td>
-          <td>3.074</td>
+        <tr class="hl">
+          <td><strong>2021 · 1ª Vuelta · Nacional</strong></td>
+          <td>Perú Libre (Castillo)</td>
+          <td><span class="big-num n-2021">36,1%</span></td>
+          <td><span class="big-num">19,7%</span></td>
+          <td><span class="diff-badge">+16,4 pp</span></td>
+          <td>3.091</td>
         </tr>
-        <tr class="highlight">
-          <td><strong>2026 · Nacional</strong><br><span style="font-size:12px;color:var(--ink-mute);">1ª vuelta presidencial</span></td>
-          <td>Juntos por el Perú<br><span style="font-size:12px;color:var(--ink-mute);">Sánchez Palomino</span></td>
-          <td><span class="num-2026">36,5%</span></td>
-          <td><span style="font-family:'Crimson Pro',serif;font-size:16px;">~11,5%</span></td>
-          <td><span class="diff-tag">+26,0 pp</span></td>
+        <tr class="hl">
+          <td><strong>2026 · 1ª Vuelta · Nacional</strong></td>
+          <td>Juntos por el Perú (Sánchez P.)</td>
+          <td><span class="big-num n-2026">36,5%</span></td>
+          <td><span class="big-num">~11,5%</span></td>
+          <td><span class="diff-badge">+26,0 pp</span></td>
           <td>4.704</td>
         </tr>
-        <tr class="highlight">
-          <td><strong>2026 · Cajamarca</strong><br><span style="font-size:12px;color:var(--ink-mute);">1ª vuelta presidencial</span></td>
-          <td>Juntos por el Perú<br><span style="font-size:12px;color:var(--ink-mute);">Sánchez Palomino</span></td>
-          <td><span class="num-caj">52,7%</span></td>
-          <td><span style="font-family:'Crimson Pro',serif;font-size:16px;">37,8%</span></td>
-          <td><span class="diff-tag">+14,9 pp</span></td>
+        <tr class="hl">
+          <td><strong>2026 · 1ª Vuelta · Cajamarca</strong></td>
+          <td>Juntos por el Perú (Sánchez P.)</td>
+          <td><span class="big-num n-caj">52,7%</span></td>
+          <td><span class="big-num">37,8%</span></td>
+          <td><span class="diff-badge">+14,9 pp</span></td>
           <td>697</td>
         </tr>
       </tbody>
     </table>
 
     <p class="explicacion">
-      En 2021 el favorecido era Perú Libre; en 2026 es Juntos por el Perú.
-      Son partidos distintos, con bases electorales distintas y candidatos distintos.
-      Lo que se mantiene constante entre una elección y otra es <strong>el mecanismo</strong>:
-      las mesas con código ≥ 900.000 siempre concentran el voto de un único partido
-      con una diferencia de entre 15 y 26 puntos respecto a las mesas normales.
+      En 2021 y en 2026 el partido beneficiado en las mesas 900K+ obtiene entre <strong>14 y 26 puntos porcentuales más</strong>
+      que en las mesas normales del mismo proceso electoral.
+      Nótese también que en 2026 el partido favorecido en Cajamarca (52,7%) duplica casi exactamente
+      el resultado del mismo partido en las mesas normales de ese departamento (37,8%).
     </p>
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 3 – COMPARATIVA 2021 vs 2026 POR DEPARTAMENTO -->
-  <!-- ══════════════════════════════════════════════════════ -->
-  <div class="seccion">
-    <div class="seccion-num">Sección 4.3</div>
-    <div class="pregunta">Presencia regional de las mesas 900K+: <em>2021 y 2026</em></div>
-    <p class="explicacion">
-      Cajamarca lidera la concentración de mesas atípicas en ambas elecciones.
-      La siguiente gráfica compara la distribución regional en 2021 (3.074 mesas) y 2026 (4.704 mesas).
-    </p>
-    <div style="position:relative; height:320px; margin-top:24px;">
-      <canvas id="chart-deptos-comp"></canvas>
-    </div>
-    <div class="leyenda" style="margin-top:14px;">
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div> 2021 (cantidad de mesas)</div>
-      <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div> 2026 (cantidad de mesas)</div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════════════════ -->
-  <!-- PREGUNTA FINAL                                         -->
+  <!-- CONCLUSIÓN                                             -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="conclusion">
     <div class="conclusion-titulo">Pregunta para ONPE</div>
     <p>
-      En dos procesos electorales distintos (2021 y 2026), con candidatos distintos y contextos políticos distintos,
-      las mesas con código ≥ 900.000 muestran un desvío estadístico sistemático a favor de un único partido
-      en cada caso, con diferencias de entre 15 y 26 puntos porcentuales respecto al resto del país.
+      En la primera vuelta de 2021, las mesas 900K+ favorecieron a Perú Libre con +16,4 pp.
+      En la primera vuelta de 2026, las mismas favorecen a Juntos por el Perú con +26,0 pp.
+      Ambos partidos son ideológicamente opuestos y tienen bases electorales distintas.
     </p>
     <p>
-      ¿Qué criterio determina qué mesas reciben un código ≥ 900.000?
-      ¿Corresponden a alguna circunscripción especial, zona geográfica específica o tipo de local particular?
-      ¿Por qué el partido favorecido cambia de una elección a otra pero el patrón de desvío se mantiene?
+      Lo que persiste entre elecciones no es el partido beneficiado, sino el mecanismo:
+      un bloque de mesas con numeración inusual (≥ 900.000) que sistemáticamente
+      concentra el voto en el partido que lidera la izquierda en cada proceso.
+      ¿Qué característica comparten estas mesas que explica este comportamiento recurrente?
     </p>
   </div>
 
-  <div class="nav-row" style="margin-top: 48px;">
+  <div class="nav-row" style="margin-top:48px;">
     <a href="index.html" class="nav-link">← Página 1: Hallazgo principal</a>
     <a href="forense.html" class="nav-link">← Página 2: Análisis forense</a>
     <a href="regiones.html" class="nav-link">← Página 3: Patrón regional</a>
   </div>
 
   <div class="footer">
-    <div>Fuente 2021: Plataforma Nacional de Datos Abiertos — ONPE (datosabiertos.gob.pe)</div>
+    <div>Fuente 2021: Plataforma Nacional de Datos Abiertos — ONPE (datosabiertos.gob.pe) · Primera vuelta presidencial</div>
     <div>Fuente 2026: API pública ONPE (resultadoelectoral.onpe.gob.pe) · Datos al 3 de mayo 2026</div>
     <div>Análisis independiente. No afirma fraude; plantea preguntas para la autoridad electoral.</div>
   </div>
 
-</div><!-- /page -->
+</div>
 
 <script>
 Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.color = '#5a6478';
 
-// ─── Gráfica A: 2021 · 900K+ · Nacional (solo 2 candidatos) ─────────────────
-new Chart(document.getElementById('chart-2021-900k').getContext('2d'), {
+// ─── DONA 2021 ───────────────────────────────────────────────────────────────
+new Chart(document.getElementById('dona-2021').getContext('2d'), {
   type: 'doughnut',
   data: {
-    labels: ['Perú Libre (Castillo)', 'Fuerza Popular (Fujimori)'],
+    labels: ['Perú Libre', 'Fuerza Popular', 'Acción Popular', 'Juntos P.P.', 'Al.Progreso', 'Part.Nac.', 'Avanza País', 'Otros'],
     datasets: [{
-      data: [69.52, 30.48],
-      backgroundColor: ['#2563a8', '#5a6478'],
-      borderWidth: 0,
-      hoverOffset: 6,
+      data: [36.06, 15.31, 9.87, 6.73, 5.48, 5.16, 3.09, 18.30],
+      backgroundColor: ['#2563a8','#3d6b4a','#b88a2c','#9d3d3d','#7a8aaa','#5a6478','#c9bfb0','#e0d8cc'],
+      borderWidth: 0, hoverOffset: 6,
     }]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '60%',
+    responsive: true, maintainAspectRatio: false, cutout: '58%',
     plugins: {
       legend: { display: false },
-      tooltip: {
-        callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%` }
-      }
+      tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
     }
   }
 });
 
-// ─── Gráfica B: 2026 · 900K+ · Nacional ─────────────────────────────────────
-new Chart(document.getElementById('chart-2026-900k').getContext('2d'), {
+// ─── DONA 2026 nacional ───────────────────────────────────────────────────────
+new Chart(document.getElementById('dona-2026').getContext('2d'), {
   type: 'doughnut',
   data: {
-    labels: [
-      'Juntos por el Perú',
-      'Fuerza Popular',
-      'Perú Libre',
-      'Cívico Obras',
-      'Ahora Nación',
-      'Podemos Perú',
-      'País Para Todos',
-      'Renovación Pop.',
-      'Otros'
-    ],
+    labels: ['Juntos por el Perú','Fuerza Popular','Perú Libre','Cívico Obras','Ahora Nación','Podemos Perú','País Para Todos','Renovación Pop.','Otros'],
     datasets: [{
       data: [36.52, 14.99, 7.85, 7.77, 3.87, 3.09, 2.49, 2.34, 21.08],
-      backgroundColor: [
-        '#9d3d3d',
-        '#3d6b4a',
-        '#2563a8',
-        '#b88a2c',
-        '#5a6478',
-        '#8a92a3',
-        '#c9bfb0',
-        '#ebe4d8',
-        '#e0d8cc'
-      ],
-      borderWidth: 0,
-      hoverOffset: 6,
+      backgroundColor: ['#9d3d3d','#3d6b4a','#2563a8','#b88a2c','#5a6478','#8a92a3','#c9bfb0','#ebe4d8','#e0d8cc'],
+      borderWidth: 0, hoverOffset: 6,
     }]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '60%',
+    responsive: true, maintainAspectRatio: false, cutout: '58%',
     plugins: {
       legend: { display: false },
-      tooltip: {
-        callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%` }
-      }
+      tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
     }
   }
 });
 
-// ─── Gráfica C: 2026 · 900K+ · Cajamarca ────────────────────────────────────
-new Chart(document.getElementById('chart-2026-caj').getContext('2d'), {
+// ─── DONA 2026 Cajamarca ─────────────────────────────────────────────────────
+new Chart(document.getElementById('dona-caj').getContext('2d'), {
   type: 'doughnut',
   data: {
-    labels: [
-      'Juntos por el Perú',
-      'Fuerza Popular',
-      'Perú Libre',
-      'Cívico Obras',
-      'Podemos Perú',
-      'Ahora Nación',
-      'Al. Progreso',
-      'Otros'
-    ],
+    labels: ['Juntos por el Perú','Fuerza Popular','Perú Libre','Cívico Obras','Podemos Perú','Ahora Nación','Al.Progreso','Otros'],
     datasets: [{
       data: [52.71, 12.01, 8.94, 5.51, 3.13, 1.68, 1.20, 14.82],
-      backgroundColor: [
-        '#b87333',
-        '#3d6b4a',
-        '#2563a8',
-        '#b88a2c',
-        '#8a92a3',
-        '#5a6478',
-        '#c9bfb0',
-        '#e0d8cc'
-      ],
-      borderWidth: 0,
-      hoverOffset: 6,
+      backgroundColor: ['#b87333','#3d6b4a','#2563a8','#b88a2c','#8a92a3','#5a6478','#c9bfb0','#e0d8cc'],
+      borderWidth: 0, hoverOffset: 6,
     }]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '60%',
+    responsive: true, maintainAspectRatio: false, cutout: '58%',
     plugins: {
       legend: { display: false },
-      tooltip: {
-        callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%` }
-      }
+      tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
     }
   }
 });
 
-// ─── Gráfica D: Comparativa regional 2021 vs 2026 ───────────────────────────
-const deptos = ['Cajamarca','Lima','Ancash','Piura','Callao','Huancavelica','Ayacucho','Pasco','Lambayeque','Puno','Loreto','Huanuco','Amazonas'];
-const d2021  = [370, 251, 260, 197, 0,   171, 158, 0,   0,   0,   205, 195, 179];
-const d2026  = [697, 405, 302, 344, 253, 290, 273, 371, 239, 237, 0,   0,   0  ];
-
-new Chart(document.getElementById('chart-deptos-comp').getContext('2d'), {
+// ─── BARRAS COMPARATIVAS ─────────────────────────────────────────────────────
+// Muestra el partido favorecido en 900K+ vs su % en mesas normales, por escenario
+new Chart(document.getElementById('barras-comp').getContext('2d'), {
   type: 'bar',
   data: {
-    labels: deptos,
+    labels: [
+      '2021 · Perú Libre\n(1ª vuelta · Nacional)',
+      '2026 · Juntos PP\n(1ª vuelta · Nacional)',
+      '2026 · Juntos PP\n(1ª vuelta · Cajamarca)',
+    ],
     datasets: [
       {
-        label: '2021',
-        data: d2021,
-        backgroundColor: '#2563a8',
-        borderRadius: 2,
-        borderWidth: 0,
+        label: 'Mesas 900K+ (atípicas)',
+        data: [36.06, 36.52, 52.71],
+        backgroundColor: ['#2563a8', '#9d3d3d', '#b87333'],
+        borderWidth: 0, borderRadius: 3,
       },
       {
-        label: '2026',
-        data: d2026,
-        backgroundColor: '#9d3d3d',
-        borderRadius: 2,
-        borderWidth: 0,
+        label: 'Mesas normales',
+        data: [19.65, 11.5, 37.84],
+        backgroundColor: ['#aac4e8', '#e0a8a8', '#e8c898'],
+        borderWidth: 0, borderRadius: 3,
       }
     ]
   },
@@ -539,17 +447,17 @@ new Chart(document.getElementById('chart-deptos-comp').getContext('2d'), {
     plugins: {
       legend: { display: false },
       tooltip: {
-        callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} mesas` }
+        callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%` }
       }
     },
     scales: {
       x: {
         grid: { display: false },
-        ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }, maxRotation: 35 }
+        ticks: { font: { family: "'JetBrains Mono', monospace", size: 11 } }
       },
       y: {
-        beginAtZero: true,
-        ticks: { font: { size: 11 } },
+        beginAtZero: true, max: 65,
+        ticks: { callback: v => v + '%', font: { size: 11 } },
         grid: { color: '#e8e0d4' }
       }
     }
