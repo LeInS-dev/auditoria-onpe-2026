@@ -336,88 +336,49 @@
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 4 — SLOPE CHART: TODOS LOS DEPARTAMENTOS      -->
+  <!-- SECCIÓN 4 — TABLA RESUMEN                              -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="seccion">
-    <div class="seccion-num">Sección 4.4 — El patrón en todos los departamentos</div>
-    <div class="pregunta">En todos los departamentos: <em>siempre positivo, nunca se invierte</em></div>
-    <p class="explicacion">
-      Cada línea es un departamento. El punto izquierdo es cuánto favoreció la serie 900K+ a Perú Libre en 2021.
-      El punto derecho es cuánto favorece a Juntos PP en 2026.
-      <strong>Todas las líneas permanecen por encima de cero en ambos lados.</strong>
-      Si el fenómeno fuera aleatorio, algunas líneas deberían terminar debajo (desvío negativo en algún año).
-      No ocurre en ningún departamento.
-    </p>
-    <div style="position:relative; height:420px; margin-top:20px;">
-      <canvas id="slope-desvio"></canvas>
-    </div>
-    <div class="leyenda" style="margin-top:12px;">
-      <div class="leyenda-item">
-        <div style="width:28px;height:2px;background:#9d3d3d;flex-shrink:0;"></div>
-        Línea por departamento (izq = desvío 2021, der = desvío 2026)
-      </div>
-      <div class="leyenda-item">
-        <div class="leyenda-dot" style="background:#2563a8;"></div>
-        Desvío 2021 — Perú Libre en mesas 900K+ vs normales
-      </div>
-      <div class="leyenda-item">
-        <div class="leyenda-dot" style="background:#9d3d3d;"></div>
-        Desvío 2026 — Juntos PP en mesas 900K+ vs normales
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 3 — TABLA RESUMEN                              -->
-  <!-- ══════════════════════════════════════════════════════ -->
-  <div class="seccion">
-    <div class="seccion-num">Sección 4.3 — Resumen numérico</div>
-    <div class="pregunta">Los tres escenarios en <em>una tabla</em></div>
+    <div class="seccion-num">Sección 4.4 — Resumen: dos elecciones, el mismo mecanismo</div>
+    <div class="pregunta">Los números <em>hablan solos</em></div>
 
     <table class="tabla-comp">
       <thead>
         <tr>
-          <th>Escenario</th>
-          <th>Partido favorecido</th>
-          <th>En 900K+</th>
-          <th>En normales</th>
+          <th>Elección</th>
+          <th>Partido favorecido en 900K+</th>
+          <th>% en 900K+</th>
+          <th>% en mesas normales</th>
           <th>Diferencia</th>
-          <th>Mesas 900K+</th>
+          <th>N° mesas 900K+</th>
         </tr>
       </thead>
       <tbody>
         <tr class="hl">
-          <td><strong>2021 · 1ª Vuelta · Nacional</strong></td>
-          <td>Perú Libre (Castillo)</td>
+          <td><strong>1ª Vuelta 2021</strong></td>
+          <td>Perú Libre — Pedro Castillo</td>
           <td><span class="big-num n-2021">36,1%</span></td>
           <td><span class="big-num">19,7%</span></td>
           <td><span class="diff-badge">+16,4 pp</span></td>
           <td>3.091</td>
         </tr>
         <tr class="hl">
-          <td><strong>2026 · 1ª Vuelta · Nacional</strong></td>
-          <td>Juntos por el Perú (Sánchez P.)</td>
+          <td><strong>1ª Vuelta 2026</strong></td>
+          <td>Juntos por el Perú — Sánchez Palomino</td>
           <td><span class="big-num n-2026">36,5%</span></td>
-          <td><span class="big-num">~11,5%</span></td>
+          <td><span class="big-num">11,5%</span></td>
           <td><span class="diff-badge">+26,0 pp</span></td>
           <td>4.704</td>
-        </tr>
-        <tr class="hl">
-          <td><strong>2026 · 1ª Vuelta · Cajamarca</strong></td>
-          <td>Juntos por el Perú (Sánchez P.)</td>
-          <td><span class="big-num n-caj">52,7%</span></td>
-          <td><span class="big-num">37,8%</span></td>
-          <td><span class="diff-badge">+14,9 pp</span></td>
-          <td>697</td>
         </tr>
       </tbody>
     </table>
 
     <p class="explicacion">
-      En 2021 y en 2026 el partido beneficiado en las mesas 900K+ obtiene entre <strong>14 y 26 puntos porcentuales más</strong>
-      que en las mesas normales del mismo proceso electoral.
-      Nótese también que en 2026 el partido favorecido en Cajamarca (52,7%) duplica casi exactamente
-      el resultado del mismo partido en las mesas normales de ese departamento (37,8%).
+      En 2021 el partido favorecido obtuvo <strong>36,1%</strong> en mesas 900K+.
+      En 2026 el partido favorecido obtuvo <strong>36,5%</strong> en mesas 900K+.
+      Son partidos opuestos, candidatos distintos, cinco años de diferencia.
+      El porcentaje es casi el mismo. El desvío respecto a las mesas normales existe en ambos casos.
+      Lo que no cambia es el bloque de mesas con código ≥ 900.000.
     </p>
   </div>
 
@@ -578,81 +539,6 @@ new Chart(document.getElementById('lineas-curva').getContext('2d'), {
   }
 });
 
-// ─── SLOPE CHART: desvío por departamento 2021 → 2026 ───────────────────────
-// Cada dataset = un departamento, dos puntos: x=0 (2021) y x=1 (2026)
-// Todas las líneas deben mantenerse positivas en ambos lados
-const slopeData = [
-  { dep: 'Ancash',       v21: 16.5, v26: 22.5 },
-  { dep: 'Junín',        v21:  4.8, v26: 27.7 },
-  { dep: 'Lima',         v21: 10.7, v26: 21.5 },
-  { dep: 'La Libertad',  v21: 11.8, v26: 18.1 },
-  { dep: 'Cajamarca',    v21: 10.2, v26: 22.0 },
-  { dep: 'Piura',        v21: 15.6, v26: 16.5 },
-  { dep: 'Cusco',        v21:  7.6, v26: 20.4 },
-  { dep: 'Puno',         v21:  6.8, v26: 18.1 },
-  { dep: 'Huánuco',      v21: 10.6, v26: 22.3 },
-  { dep: 'Lambayeque',   v21:  9.4, v26:  6.2 },
-  { dep: 'Ayacucho',     v21:  3.5, v26: 24.3 },
-  { dep: 'San Martín',   v21:  4.9, v26: 14.9 },
-];
-
-// Paleta de colores para las líneas
-const slopeColors = [
-  '#2563a8','#9d3d3d','#3d6b4a','#b88a2c','#7a3d9d','#3d7a8a',
-  '#9d6b3d','#5a6478','#b87333','#3d4a9d','#6b9d3d','#9d3d6b'
-];
-
-new Chart(document.getElementById('slope-desvio').getContext('2d'), {
-  type: 'line',
-  data: {
-    labels: ['2021\nPerú Libre', '2026\nJuntos PP'],
-    datasets: slopeData.map((d, i) => ({
-      label: d.dep,
-      data: [d.v21, d.v26],
-      borderColor: slopeColors[i],
-      backgroundColor: slopeColors[i],
-      borderWidth: 2,
-      pointRadius: 5,
-      pointHoverRadius: 7,
-      tension: 0,
-    }))
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          title: items => items[0].dataset.label,
-          label: c => ` ${c.label === '2021\nPerú Libre' ? '2021' : '2026'}: +${c.parsed.y.toFixed(1)} pp`
-        }
-      },
-      datalabels: {
-        // Mostrar nombre del departamento solo en el lado derecho (index 1)
-        display: ctx => ctx.dataIndex === 1,
-        formatter: (v, ctx) => ctx.dataset.label,
-        anchor: 'right',
-        align: 'right',
-        offset: 6,
-        font: { family: "'JetBrains Mono', monospace", size: 9 },
-        color: ctx => slopeColors[ctx.datasetIndex],
-      }
-    },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { font: { family: "'Crimson Pro', serif", size: 14, weight: '600' } }
-      },
-      y: {
-        min: 0, max: 34,
-        ticks: { callback: v => '+' + v + ' pp', font: { size: 10 } },
-        grid: { color: '#e8e0d4' },
-        title: { display: true, text: 'Desvío del partido favorecido en mesas 900K+ (pp sobre mesas normales)', font: { size: 10 }, color: '#8a92a3' }
-      }
-    },
-    layout: { padding: { right: 90 } }
-  }
-});
 </script>
 </body>
 </html>
