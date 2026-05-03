@@ -91,7 +91,7 @@
   /* ─── Grid de 3 tarjetas ─── */
   .tres-cols {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
     margin: 32px 0;
   }
@@ -244,34 +244,44 @@
   </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- SECCIÓN 2 — BARRAS COMPARATIVAS (atípicas vs normales) -->
+  <!-- SECCIÓN 2 — SIMILITUD ESTADÍSTICA 2021 vs 2026        -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="seccion">
-    <div class="seccion-num">Sección 4.2 — Partido favorecido: mesas 900K+ vs. mesas normales</div>
-    <div class="pregunta">El mismo desvío, <em>en dos elecciones distintas</em></div>
+    <div class="seccion-num">Sección 4.2 — Distribución por partido en mesas 900K+: 2021 vs 2026</div>
+    <div class="pregunta">Los porcentajes son <em>casi idénticos</em> en ambas elecciones</div>
     <p class="explicacion">
-      Cada par de barras compara al partido favorecido en mesas 900K+ (barra sólida) versus su resultado
-      en mesas normales del mismo proceso (barra rayada). El número rojo es la diferencia.
-      <strong>El patrón es idéntico:</strong> en 2021 y en 2026, el partido de izquierda que lidera cada proceso
-      obtiene entre 14 y 26 puntos porcentuales más en las mesas atípicas que en el resto.
+      Las barras muestran cómo se distribuyeron los votos por partido <strong>dentro de las mesas 900K+</strong>
+      en 2021 (azul) y en 2026 (rojo). Lo llamativo no es solo que un partido se lleve el primer lugar,
+      sino que <strong>Fuerza Popular obtiene ~15% en ambos años</strong> y el partido de izquierda líder
+      obtiene ~36% en ambos años. La distribución completa es casi un espejo. Eso no ocurre por azar.
     </p>
+    <div style="position:relative; height:400px; margin-top:24px;">
+      <canvas id="barras-similitud"></canvas>
+    </div>
+    <div class="leyenda" style="margin-top:14px;">
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>2021 · 1ª Vuelta · mesas 900K+ (partido líder: Perú Libre)</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>2026 · 1ª Vuelta · mesas 900K+ (partido líder: Juntos por el Perú)</div>
+    </div>
+  </div>
 
-    <!-- Gráfico de barras horizontales custom (SVG-free, puro HTML+CSS) -->
-    <div id="barras-custom" style="margin-top:24px;"></div>
-
-    <div class="leyenda" style="margin-top:18px;">
-      <div class="leyenda-item">
-        <div style="width:14px;height:14px;border-radius:2px;background:#1a2438;flex-shrink:0;"></div>
-        Mesas 900K+ (atípicas)
-      </div>
-      <div class="leyenda-item">
-        <div style="width:14px;height:14px;border-radius:2px;background:#c9bfb0;border:1px solid #a8a090;flex-shrink:0;"></div>
-        Mesas normales
-      </div>
-      <div class="leyenda-item">
-        <div style="width:14px;height:14px;border-radius:2px;background:#9d3d3d;flex-shrink:0;"></div>
-        Diferencia (desvío)
-      </div>
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 3 — REGIONES CON PATRÓN EN AMBOS AÑOS         -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="seccion">
+    <div class="seccion-num">Sección 4.3 — Regiones con desvío en ambas elecciones</div>
+    <div class="pregunta"><em>12 departamentos</em> muestran el mismo patrón en 2021 y en 2026</div>
+    <p class="explicacion">
+      En cada uno de estos departamentos, las mesas 900K+ favorecen al partido de izquierda líder
+      con más puntos que las mesas normales del mismo departamento, <strong>en ambas elecciones</strong>.
+      Si fuera un fenómeno aleatorio o geográfico puntual, esperaríamos que en algunos departamentos
+      el desvío desapareciera o se invirtiera entre 2021 y 2026. No ocurre.
+    </p>
+    <div style="position:relative; height:380px; margin-top:20px;">
+      <canvas id="barras-regiones"></canvas>
+    </div>
+    <div class="leyenda" style="margin-top:14px;">
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#2563a8;"></div>2021: desvío Perú Libre en 900K+ vs normales (pp)</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#9d3d3d;"></div>2026: desvío Juntos PP en 900K+ vs normales (pp)</div>
     </div>
   </div>
 
@@ -425,94 +435,112 @@ new Chart(document.getElementById('dona-caj').getContext('2d'), {
   }
 });
 
-// ─── BARRAS CUSTOM ───────────────────────────────────────────────────────────
-// Muestra el patrón de similitud 2021 vs 2026 de forma clara
-(function() {
-  const escenarios = [
-    {
-      anio: '2021',
-      label: 'Perú Libre · 1ª Vuelta · Nacional',
-      partido: 'Perú Libre (Castillo)',
-      pct900k: 36.06,
-      pctNormal: 19.65,
-      diff: 16.41,
-      color900k: '#2563a8',
-      colorNorm: '#aac4e8',
+// ─── BARRAS SIMILITUD: distribución por partido 2021 vs 2026 en 900K+ ───────
+// Eje X: partidos (agrupados por rol: izquierda líder, FP, resto)
+// Las etiquetas del eje X alternan entre el nombre 2021 y 2026
+
+new Chart(document.getElementById('barras-similitud').getContext('2d'), {
+  type: 'bar',
+  data: {
+    // Cada posición = un partido "equivalente" entre años
+    labels: [
+      'Izquierda líder\n(PL 2021 / JPP 2026)',
+      'Fuerza Popular',
+      '3er partido\n(AP 2021 / PL 2026)',
+      '4to partido\n(JPP 2021 / C.Obras 2026)',
+      '5to partido\n(APP 2021 / A.Nación 2026)',
+      '6to partido\n(PN 2021 / Podemos 2026)',
+      '7mo partido\n(Avanza País 2021 / País PTodos 2026)',
+    ],
+    datasets: [
+      {
+        label: '2021 · mesas 900K+ (Perú Libre lidera)',
+        data: [36.06, 15.31, 9.87, 6.73, 5.48, 5.16, 3.09],
+        backgroundColor: 'rgba(37,99,168,0.85)',
+        borderColor: '#2563a8',
+        borderWidth: 1,
+        borderRadius: 3,
+      },
+      {
+        label: '2026 · mesas 900K+ (Juntos PP lidera)',
+        data: [36.52, 14.99, 7.85, 7.77, 3.87, 3.09, 2.49],
+        backgroundColor: 'rgba(157,61,61,0.85)',
+        borderColor: '#9d3d3d',
+        borderWidth: 1,
+        borderRadius: 3,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%` }
+      },
+      // Anotación manual de la similitud
     },
-    {
-      anio: '2026',
-      label: 'Juntos por el Perú · 1ª Vuelta · Nacional',
-      partido: 'Juntos por el Perú (Sánchez P.)',
-      pct900k: 36.52,
-      pctNormal: 11.5,
-      diff: 26.0,
-      color900k: '#9d3d3d',
-      colorNorm: '#e0a8a8',
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }, maxRotation: 0 }
+      },
+      y: {
+        beginAtZero: true, max: 45,
+        ticks: { callback: v => v + '%', font: { size: 11 } },
+        grid: { color: '#e8e0d4' },
+        title: { display: true, text: '% votos válidos en mesas 900K+', font: { size: 11 }, color: '#8a92a3' }
+      }
+    }
+  }
+});
+
+// ─── BARRAS REGIONES: desvío por departamento 2021 vs 2026 ──────────────────
+new Chart(document.getElementById('barras-regiones').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: ['Ancash','Junín','Lima','La Libertad','Cajamarca','Piura','Cusco','Puno','Huánuco','Lambayeque','Ayacucho','San Martín'],
+    datasets: [
+      {
+        label: '2021: desvío Perú Libre en 900K+ vs normales',
+        data: [16.5, 4.8, 10.7, 11.8, 10.2, 15.6, 7.6, 6.8, 10.6, 9.4, 3.5, 4.9],
+        backgroundColor: 'rgba(37,99,168,0.8)',
+        borderColor: '#2563a8',
+        borderWidth: 1,
+        borderRadius: 3,
+      },
+      {
+        label: '2026: desvío Juntos PP en 900K+ vs normales',
+        data: [22.5, 27.7, 21.5, 18.1, 22.0, 16.5, 20.4, 18.1, 22.3, 6.2, 24.3, 14.9],
+        backgroundColor: 'rgba(157,61,61,0.8)',
+        borderColor: '#9d3d3d',
+        borderWidth: 1,
+        borderRadius: 3,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: { label: c => ` ${c.dataset.label}: +${c.parsed.y.toFixed(1)} pp` }
+      }
     },
-    {
-      anio: '2026',
-      label: 'Juntos por el Perú · 1ª Vuelta · Cajamarca',
-      partido: 'Juntos por el Perú — solo Cajamarca',
-      pct900k: 52.71,
-      pctNormal: 37.84,
-      diff: 14.87,
-      color900k: '#b87333',
-      colorNorm: '#e8c898',
-    },
-  ];
-
-  const MAX = 60;
-  const container = document.getElementById('barras-custom');
-
-  escenarios.forEach(e => {
-    const w900k  = (e.pct900k  / MAX * 100).toFixed(1);
-    const wNorm  = (e.pctNormal / MAX * 100).toFixed(1);
-    const wDiff  = (e.diff     / MAX * 100).toFixed(1);
-
-    container.innerHTML += `
-      <div style="margin-bottom:28px;">
-        <!-- Etiqueta -->
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8a92a3;min-width:36px;">${e.anio}</span>
-          <span style="font-size:13px;font-weight:600;color:#1a2438;">${e.partido}</span>
-        </div>
-
-        <!-- Barra 900K+ -->
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6478;min-width:110px;text-align:right;">Mesas 900K+</span>
-          <div style="flex:1;background:#f0ece4;border-radius:2px;height:26px;position:relative;">
-            <div style="width:${w900k}%;background:${e.color900k};height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;">
-              <span style="color:white;font-weight:700;font-size:13px;font-family:'Crimson Pro',serif;">${e.pct900k.toFixed(1)}%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Barra normal -->
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6478;min-width:110px;text-align:right;">Mesas normales</span>
-          <div style="flex:1;background:#f0ece4;border-radius:2px;height:26px;position:relative;">
-            <div style="width:${wNorm}%;background:${e.colorNorm};border:1px solid ${e.color900k}40;height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;">
-              <span style="color:#1a2438;font-weight:600;font-size:13px;font-family:'Crimson Pro',serif;">${e.pctNormal.toFixed(1)}%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Barra diferencia -->
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9d3d3d;min-width:110px;text-align:right;font-weight:600;">Diferencia</span>
-          <div style="flex:1;background:#f0ece4;border-radius:2px;height:20px;position:relative;">
-            <div style="width:${wDiff}%;background:#9d3d3d22;border:2px solid #9d3d3d;height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;">
-              <span style="color:#9d3d3d;font-weight:700;font-size:13px;font-family:'Crimson Pro',serif;">+${e.diff.toFixed(1)} pp</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Línea divisora (no en el último) -->
-        <div style="border-top:1px solid #c9bfb0;margin-top:18px;"></div>
-      </div>
-    `;
-  });
-})();
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }, maxRotation: 30 }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { callback: v => '+' + v + ' pp', font: { size: 11 } },
+        grid: { color: '#e8e0d4' },
+        title: { display: true, text: 'Desvío (puntos porcentuales sobre mesas normales)', font: { size: 11 }, color: '#8a92a3' }
+      }
+    }
+  }
+});
 </script>
 </body>
 </html>
