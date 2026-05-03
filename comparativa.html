@@ -378,8 +378,12 @@
 </div>
 
 <script>
+// Registrar datalabels ANTES de crear cualquier chart
+Chart.register(ChartDataLabels);
 Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.color = '#5a6478';
+
+const NO_LABELS = { datalabels: { display: false } };
 
 // ─── DONA 2021 ───────────────────────────────────────────────────────────────
 new Chart(document.getElementById('dona-2021').getContext('2d'), {
@@ -395,6 +399,7 @@ new Chart(document.getElementById('dona-2021').getContext('2d'), {
   options: {
     responsive: true, maintainAspectRatio: false, cutout: '58%',
     plugins: {
+      ...NO_LABELS,
       legend: { display: false },
       tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
     }
@@ -415,6 +420,7 @@ new Chart(document.getElementById('dona-2026').getContext('2d'), {
   options: {
     responsive: true, maintainAspectRatio: false, cutout: '58%',
     plugins: {
+      ...NO_LABELS,
       legend: { display: false },
       tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
     }
@@ -435,14 +441,12 @@ new Chart(document.getElementById('dona-caj').getContext('2d'), {
   options: {
     responsive: true, maintainAspectRatio: false, cutout: '58%',
     plugins: {
+      ...NO_LABELS,
       legend: { display: false },
       tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed.toFixed(1)}%` } }
     }
   }
 });
-
-// Registrar plugin datalabels globalmente
-Chart.register(ChartDataLabels);
 
 // ─── GRÁFICO SIMILITUD: todos los partidos 2021 y 2026 en 900K+ ─────────────
 // Eje X: partidos individuales de CADA año (no agrupados)
